@@ -15,17 +15,28 @@ body{margin:0;background:var(--bg);color:var(--fg);
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
 line-height:1.75;font-size:16px}
 header{position:sticky;top:0;z-index:9;background:var(--card);border-bottom:1px solid var(--border);
-padding:8px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+padding:8px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 header .title{font-weight:700;font-size:15px}
-header details{flex:1;min-width:120px}
-header summary{cursor:pointer;font-size:14px;color:var(--accent);list-style:none}
+header a{font-size:14px;text-decoration:none;color:var(--accent)}
+header details{flex:1;min-width:110px}
+header summary{cursor:pointer;font-size:14px;color:var(--accent);list-style:none;display:inline-block}
 header summary::-webkit-details-marker{display:none}
-nav{display:flex;flex-direction:column;max-height:60vh;overflow:auto;margin-top:6px}
-nav a{color:var(--fg);text-decoration:none;font-size:13.5px;padding:3px 0;border-bottom:1px dashed var(--border)}
-nav a.ch{color:var(--accent);font-weight:600}
-main{max-width:780px;margin:0 auto;padding:18px 16px 80px}
-article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;margin-bottom:24px;
+header nav{display:flex;flex-direction:column;max-height:60vh;overflow:auto;margin-top:6px;
+background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+header nav a{color:var(--fg);text-decoration:none;font-size:13.5px;padding:3px 2px;border-bottom:1px dashed var(--border)}
+header nav a.ch{color:var(--accent);font-weight:600}
+.layout{max-width:1340px;margin:0 auto;padding:16px 20px 80px;display:grid;
+grid-template-columns:256px minmax(0,1fr);gap:30px;align-items:start}
+aside{position:sticky;top:62px;max-height:calc(100vh - 80px);overflow:auto;background:var(--card);
+border:1px solid var(--border);border-radius:12px;padding:12px 10px}
+aside .cap{font-size:12px;color:var(--muted);font-weight:700;padding:2px 8px 8px;letter-spacing:.05em}
+aside a{display:block;color:var(--fg);text-decoration:none;font-size:13px;padding:5px 9px;border-radius:7px;line-height:1.45}
+aside a:hover{background:var(--code-bg)}
+aside a.ch{color:var(--accent);font-weight:600}
+main{min-width:0}
+article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 22px;margin-bottom:24px;
 overflow-wrap:break-word}
+h1,h2,article[id]{scroll-margin-top:70px}
 h1{font-size:1.45em;border-bottom:2px solid var(--accent);padding-bottom:6px}
 h2{font-size:1.25em;border-bottom:1px solid var(--border);padding-bottom:4px;margin-top:1.6em}
 h3{font-size:1.08em;margin-top:1.4em}
@@ -44,13 +55,15 @@ th,td{border:1px solid var(--border);padding:6px 9px;text-align:left;vertical-al
 th{background:var(--code-bg)}
 hr{border:none;border-top:1px solid var(--border);margin:2em 0}
 li{margin:.25em 0}
+@media(max-width:1099px){.layout{grid-template-columns:1fr;padding:14px 12px 80px}aside{display:none}}
+@media(min-width:1100px){article{padding:30px 38px}body{font-size:16.5px}}
 </style>
 </head>
 <body>
 <header>
   <span class="title">📱 大模型面试教程</span>
-  <a href="#doc0" style="font-size:14px;text-decoration:none;color:var(--accent)">教程</a>
-  <a href="#doc1" style="font-size:14px;text-decoration:none;color:var(--accent)">速查</a>
+  <a href="#doc0">教程</a>
+  <a href="#doc1">速查</a>
   <details>
     <summary>📖 目录 / 跳转</summary>
     <nav><a class="ch" href="#d0-1">教程 · 大模型面试教程（含真题与项目专题）</a>
@@ -136,8 +149,41 @@ li{margin:.25em 0}
 <a class="ch" href="#d1-14">速查手册 · 12. 复习路线与面试软技巧</a></nav>
   </details>
 </header>
-<main>
-<article id="doc0"><h1 id="d0-1">大模型面试教程（含真题与项目专题）</h1>
+<div class="layout">
+  <aside>
+    <div class="cap">目录</div>
+    <a class="ch" href="#d0-1">大模型面试教程（含真题与项目专题）</a>
+<a class="ch" href="#d0-3">第 0 章 面试全景</a>
+<a class="ch" href="#d0-7">第 1 章 Transformer 与模型结构</a>
+<a class="ch" href="#d0-11">第 2 章 Tokenizer 与词表</a>
+<a class="ch" href="#d0-14">第 3 章 预训练与训练工程</a>
+<a class="ch" href="#d0-18">第 4 章 SFT 与参数高效微调（LoRA 专题）</a>
+<a class="ch" href="#d0-22">第 5 章 对齐：RLHF / DPO / GRPO</a>
+<a class="ch" href="#d0-26">第 6 章 推理与部署</a>
+<a class="ch" href="#d0-29">第 7 章 RAG</a>
+<a class="ch" href="#d0-33">第 8 章 Agent</a>
+<a class="ch" href="#d0-36">第 9 章 评测、幻觉与安全</a>
+<a class="ch" href="#d0-39">第 10 章 多模态</a>
+<a class="ch" href="#d0-42">第 11 章 项目面试专题（重点章）</a>
+<a class="ch" href="#d0-51">第 12 章 手撕代码题库（10 题）</a>
+<a class="ch" href="#d0-62">第 13 章 开放题与反问</a>
+<a class="ch" href="#d0-65">第 14 章 复习计划与真题来源</a>
+<a class="ch" href="#d1-2">0. 考点地图</a>
+<a class="ch" href="#d1-3">1. Transformer 与模型结构</a>
+<a class="ch" href="#d1-4">2. Tokenizer 与词表</a>
+<a class="ch" href="#d1-5">3. 预训练</a>
+<a class="ch" href="#d1-6">4. 微调与对齐（最高频章节）</a>
+<a class="ch" href="#d1-7">5. 推理与部署（应用岗 &amp; 系统岗必考）</a>
+<a class="ch" href="#d1-8">6. RAG（应用岗必考）</a>
+<a class="ch" href="#d1-9">7. Agent 与工具调用</a>
+<a class="ch" href="#d1-10">8. 评测、幻觉与安全</a>
+<a class="ch" href="#d1-11">9. 多模态</a>
+<a class="ch" href="#d1-12">10. 工程与手撕题汇总</a>
+<a class="ch" href="#d1-13">11. 高频问答速查清单（面试前一晚过一遍）</a>
+<a class="ch" href="#d1-14">12. 复习路线与面试软技巧</a>
+  </aside>
+  <main>
+  <article id="doc0"><h1 id="d0-1">大模型面试教程（含真题与项目专题）</h1>
 <blockquote>
 <p><strong>定位</strong>：这是一份"教程"而非题海——每章按「知识讲解 → 真题实战 → 加分项」组织，真题来自 Datawhale 2025 秋招面试八股合集、RAG 夺命十连问、牛客/知乎面经等公开题库（文末附全部来源链接）。
 <strong>配套</strong>：<code>大模型面试资料.md</code> 是速查手册（50 题一句话答案）；本文件是完整教程，两者配合使用。
@@ -1884,6 +1930,7 @@ mask = torch.tril(torch.ones(T, T, dtype=torch.bool))
 <p><strong>常见反问参考</strong>：团队目前模型是自研还是微调开源？训练/推理算力规模？RAG/Agent 落地到什么阶段、最大的瓶颈是什么？入职后前三个月的期望产出？</p>
 <hr />
 <p><em>整理日期：2026-10-20。建议结合最新论文和目标公司的技术博客滚动更新（Agent、推理模型 RL 这两个方向变化最快）。</em></p></article>
-</main>
+  </main>
+</div>
 </body>
 </html>
