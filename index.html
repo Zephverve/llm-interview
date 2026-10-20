@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大模型面试教程</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--fg:#24292f;--muted:#57606a;--accent:#0969da;
+--border:#d8dee4;--code-bg:#f0f2f5;--pre-bg:#0d1117;--pre-fg:#e6edf3;--quote-bg:#f0f6ff}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--muted:#8b949e;
+--accent:#58a6ff;--border:#30363d;--code-bg:#21262d;--pre-bg:#010409;--pre-fg:#e6edf3;--quote-bg:#111b2b}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+line-height:1.75;font-size:16px}
+header{position:sticky;top:0;z-index:9;background:var(--card);border-bottom:1px solid var(--border);
+padding:8px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header .title{font-weight:700;font-size:15px}
+header details{flex:1;min-width:120px}
+header summary{cursor:pointer;font-size:14px;color:var(--accent);list-style:none}
+header summary::-webkit-details-marker{display:none}
+nav{display:flex;flex-direction:column;max-height:60vh;overflow:auto;margin-top:6px}
+nav a{color:var(--fg);text-decoration:none;font-size:13.5px;padding:3px 0;border-bottom:1px dashed var(--border)}
+nav a.ch{color:var(--accent);font-weight:600}
+main{max-width:780px;margin:0 auto;padding:18px 16px 80px}
+article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;margin-bottom:24px;
+overflow-wrap:break-word}
+h1{font-size:1.45em;border-bottom:2px solid var(--accent);padding-bottom:6px}
+h2{font-size:1.25em;border-bottom:1px solid var(--border);padding-bottom:4px;margin-top:1.6em}
+h3{font-size:1.08em;margin-top:1.4em}
+a{color:var(--accent)}
+blockquote{margin:1em 0;padding:10px 14px;background:var(--quote-bg);border-left:4px solid var(--accent);
+border-radius:0 8px 8px 0;font-size:.95em}
+blockquote p{margin:.3em 0}
+code{background:var(--code-bg);padding:1px 5px;border-radius:5px;font-size:.9em;
+font-family:Consolas,Menlo,monospace}
+pre{background:var(--pre-bg);color:var(--pre-fg);padding:12px;border-radius:10px;overflow-x:auto;
+font-size:13px;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+.table-wrap{overflow-x:auto;margin:1em 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--border);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+hr{border:none;border-top:1px solid var(--border);margin:2em 0}
+li{margin:.25em 0}
+</style>
+</head>
+<body>
+<header>
+  <span class="title">📱 大模型面试教程</span>
+  <a href="#doc0" style="font-size:14px;text-decoration:none;color:var(--accent)">教程</a>
+  <a href="#doc1" style="font-size:14px;text-decoration:none;color:var(--accent)">速查</a>
+  <details>
+    <summary>📖 目录 / 跳转</summary>
+    <nav><a class="ch" href="#d0-1">教程 · 大模型面试教程（含真题与项目专题）</a>
+<a class="" href="#d0-2">教程 · 目录</a>
+<a class="ch" href="#d0-3">教程 · 第 0 章 面试全景</a>
+<a class="" href="#d0-4">教程 · 0.1 岗位类型与考察侧重</a>
+<a class="" href="#d0-5">教程 · 0.2 典型面试流程</a>
+<a class="" href="#d0-6">教程 · 0.3 回答问题的黄金结构</a>
+<a class="ch" href="#d0-7">教程 · 第 1 章 Transformer 与模型结构</a>
+<a class="" href="#d0-8">教程 · 1.1 知识讲解：从语言模型到注意力</a>
+<a class="" href="#d0-9">教程 · 1.2 真题实战</a>
+<a class="" href="#d0-10">教程 · 1.3 加分项</a>
+<a class="ch" href="#d0-11">教程 · 第 2 章 Tokenizer 与词表</a>
+<a class="" href="#d0-12">教程 · 2.1 知识讲解</a>
+<a class="" href="#d0-13">教程 · 2.2 真题实战</a>
+<a class="ch" href="#d0-14">教程 · 第 3 章 预训练与训练工程</a>
+<a class="" href="#d0-15">教程 · 3.1 知识讲解</a>
+<a class="" href="#d0-16">教程 · 3.2 真题实战</a>
+<a class="" href="#d0-17">教程 · 3.3 加分项：显存与成本估算（必考计算题）</a>
+<a class="ch" href="#d0-18">教程 · 第 4 章 SFT 与参数高效微调（LoRA 专题）</a>
+<a class="" href="#d0-19">教程 · 4.1 知识讲解</a>
+<a class="" href="#d0-20">教程 · 4.2 真题实战</a>
+<a class="" href="#d0-21">教程 · 4.3 加分项</a>
+<a class="ch" href="#d0-22">教程 · 第 5 章 对齐：RLHF / DPO / GRPO</a>
+<a class="" href="#d0-23">教程 · 5.1 知识讲解：三阶段流程图</a>
+<a class="" href="#d0-24">教程 · 5.2 真题实战（Datawhale 对齐 13 题精选）</a>
+<a class="" href="#d0-25">教程 · 5.3 加分项</a>
+<a class="ch" href="#d0-26">教程 · 第 6 章 推理与部署</a>
+<a class="" href="#d0-27">教程 · 6.1 知识讲解：prefill 与 decode 是两件事（必考）</a>
+<a class="" href="#d0-28">教程 · 6.2 真题实战</a>
+<a class="ch" href="#d0-29">教程 · 第 7 章 RAG</a>
+<a class="" href="#d0-30">教程 · 7.1 知识讲解：完整链路</a>
+<a class="" href="#d0-31">教程 · 7.2 真题实战：RAG 夺命十连问（逐题讲解）</a>
+<a class="" href="#d0-32">教程 · 7.3 真题实战：其他高频 RAG 题（Datawhale）</a>
+<a class="ch" href="#d0-33">教程 · 第 8 章 Agent</a>
+<a class="" href="#d0-34">教程 · 8.1 知识讲解</a>
+<a class="" href="#d0-35">教程 · 8.2 真题实战（Datawhale Agent 13 题精选）</a>
+<a class="ch" href="#d0-36">教程 · 第 9 章 评测、幻觉与安全</a>
+<a class="" href="#d0-37">教程 · 9.1 真题实战</a>
+<a class="" href="#d0-38">教程 · 9.2 榜单速查表</a>
+<a class="ch" href="#d0-39">教程 · 第 10 章 多模态</a>
+<a class="" href="#d0-40">教程 · 10.1 知识讲解</a>
+<a class="" href="#d0-41">教程 · 10.2 真题实战（Datawhale VLM 11 题精选）</a>
+<a class="ch" href="#d0-42">教程 · 第 11 章 项目面试专题（重点章）</a>
+<a class="" href="#d0-43">教程 · 11.1 三分钟项目介绍模板</a>
+<a class="" href="#d0-44">教程 · 11.2 面试官的四层追问逻辑（自查清单）</a>
+<a class="" href="#d0-45">教程 · 11.3 RAG 项目追问题库（18 问）</a>
+<a class="" href="#d0-46">教程 · 11.4 微调项目追问题库（15 问）</a>
+<a class="" href="#d0-47">教程 · 11.5 Agent 项目追问题库（10 问）</a>
+<a class="" href="#d0-48">教程 · 11.6 推理优化项目追问题库（10 问）</a>
+<a class="" href="#d0-49">教程 · 11.7 通用项目问题（每类项目都会被问）</a>
+<a class="" href="#d0-50">教程 · 11.8 没有大模型项目经历怎么办？</a>
+<a class="ch" href="#d0-51">教程 · 第 12 章 手撕代码题库（10 题）</a>
+<a class="" href="#d0-52">教程 · 12.1 标准 Multi-Head Attention（带 mask）</a>
+<a class="" href="#d0-53">教程 · 12.2 带 KV Cache 的解码式 Attention（高频，2025 面经新增）</a>
+<a class="" href="#d0-54">教程 · 12.3 RoPE</a>
+<a class="" href="#d0-55">教程 · 12.4 RMSNorm / LayerNorm</a>
+<a class="" href="#d0-56">教程 · 12.5 SwiGLU FFN</a>
+<a class="" href="#d0-57">教程 · 12.6 Top-P（nucleus）采样</a>
+<a class="" href="#d0-58">教程 · 12.7 LoRA 层</a>
+<a class="" href="#d0-59">教程 · 12.8 简化 BPE 训练</a>
+<a class="" href="#d0-60">教程 · 12.9 投机解码（伪代码级）</a>
+<a class="" href="#d0-61">教程 · 12.10 手撕清单 checklist（考前过一遍）</a>
+<a class="ch" href="#d0-62">教程 · 第 13 章 开放题与反问</a>
+<a class="" href="#d0-63">教程 · 13.1 开放题回答框架</a>
+<a class="" href="#d0-64">教程 · 13.2 反问问题（体现水平的 5 个）</a>
+<a class="ch" href="#d0-65">教程 · 第 14 章 复习计划与真题来源</a>
+<a class="" href="#d0-66">教程 · 14.1 两周复习计划</a>
+<a class="" href="#d0-67">教程 · 14.2 真题与资料来源（本文真题出处）</a>
+<a class="" href="#d1-1">速查手册 · 大模型 (LLM) 面试资料整理</a>
+<a class="ch" href="#d1-2">速查手册 · 0. 考点地图</a>
+<a class="ch" href="#d1-3">速查手册 · 1. Transformer 与模型结构</a>
+<a class="ch" href="#d1-4">速查手册 · 2. Tokenizer 与词表</a>
+<a class="ch" href="#d1-5">速查手册 · 3. 预训练</a>
+<a class="ch" href="#d1-6">速查手册 · 4. 微调与对齐（最高频章节）</a>
+<a class="ch" href="#d1-7">速查手册 · 5. 推理与部署（应用岗 &amp; 系统岗必考）</a>
+<a class="ch" href="#d1-8">速查手册 · 6. RAG（应用岗必考）</a>
+<a class="ch" href="#d1-9">速查手册 · 7. Agent 与工具调用</a>
+<a class="ch" href="#d1-10">速查手册 · 8. 评测、幻觉与安全</a>
+<a class="ch" href="#d1-11">速查手册 · 9. 多模态</a>
+<a class="ch" href="#d1-12">速查手册 · 10. 工程与手撕题汇总</a>
+<a class="ch" href="#d1-13">速查手册 · 11. 高频问答速查清单（面试前一晚过一遍）</a>
+<a class="ch" href="#d1-14">速查手册 · 12. 复习路线与面试软技巧</a></nav>
+  </details>
+</header>
+<main>
+<article id="doc0"><h1 id="d0-1">大模型面试教程（含真题与项目专题）</h1>
+<blockquote>
+<p><strong>定位</strong>：这是一份"教程"而非题海——每章按「知识讲解 → 真题实战 → 加分项」组织，真题来自 Datawhale 2025 秋招面试八股合集、RAG 夺命十连问、牛客/知乎面经等公开题库（文末附全部来源链接）。
+<strong>配套</strong>：<code>大模型面试资料.md</code> 是速查手册（50 题一句话答案）；本文件是完整教程，两者配合使用。
+整理日期：2026-10-20</p>
+</blockquote>
+<h2 id="d0-2">目录</h2>
+<ul>
+<li>第 0 章 面试全景：岗位、流程、考察逻辑</li>
+<li><a href="#d0-7">第 1 章 Transformer 与模型结构</a></li>
+<li><a href="#d0-11">第 2 章 Tokenizer 与词表</a></li>
+<li><a href="#d0-14">第 3 章 预训练与训练工程</a></li>
+<li><a href="#d0-18">第 4 章 SFT 与参数高效微调（LoRA 专题）</a></li>
+<li><a href="#d0-22">第 5 章 对齐：RLHF / DPO / GRPO</a></li>
+<li><a href="#d0-26">第 6 章 推理与部署</a></li>
+<li><a href="#d0-29">第 7 章 RAG</a></li>
+<li><a href="#d0-33">第 8 章 Agent</a></li>
+<li><a href="#d0-36">第 9 章 评测、幻觉与安全</a></li>
+<li><a href="#d0-39">第 10 章 多模态</a></li>
+<li>第 11 章 <strong>项目面试专题</strong>（RAG/微调/Agent/推理项目追问题库）</li>
+<li>第 12 章 手撕代码题库（10 题带代码）</li>
+<li><a href="#d0-62">第 13 章 开放题与反问</a></li>
+<li><a href="#d0-65">第 14 章 复习计划与真题来源</a></li>
+</ul>
+<hr />
+<h1 id="d0-3">第 0 章 面试全景</h1>
+<h2 id="d0-4">0.1 岗位类型与考察侧重</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>岗位</th>
+<th>核心技能</th>
+<th>面试侧重</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>预训练/基座算法</td>
+<td>分布式训练、数据工程、Scaling</td>
+<td>并行策略、训练稳定性、数据配比、手撕</td>
+</tr>
+<tr>
+<td>微调/对齐算法</td>
+<td>SFT、RLHF、评测</td>
+<td>LoRA/RLHF 细节、偏好数据构造、评估方法</td>
+</tr>
+<tr>
+<td>推理/系统优化</td>
+<td>CUDA、vLLM、量化</td>
+<td>KV Cache 计算、量化方案、吞吐延迟、系统设计</td>
+</tr>
+<tr>
+<td>应用算法（RAG/Agent）</td>
+<td>检索、Prompt、工程</td>
+<td>RAG 全链路追问、效果优化、bad case 分析</td>
+</tr>
+<tr>
+<td>多模态算法</td>
+<td>VLM、视觉</td>
+<td>CLIP/LLaVA 架构、视觉 token、多模态训练</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>先搞清楚目标岗位再看对应章节</strong>——应用岗不会让你手写 CUDA kernel，算法岗不会只聊 LangChain。</p>
+<h2 id="d0-5">0.2 典型面试流程</h2>
+<ol>
+<li><strong>一面（基础 + 手撕）</strong>：Transformer/LoRA/RLHF 八股 + 手写 attention。目标：证明基础扎实。</li>
+<li><strong>二面（项目深挖）</strong>：围绕简历项目连环追问 30–45 分钟。目标：确认项目真实性、考察技术决策能力（见第 11 章）。</li>
+<li><strong>三面/交叉面（场景与系统）</strong>：开放场景题（"给你 100 万条客服对话怎么做一个问答系统"）、系统设计、成本权衡。</li>
+<li><strong>HR 面</strong>：稳定性、动机、反问。</li>
+</ol>
+<h2 id="d0-6">0.3 回答问题的黄金结构</h2>
+<p>每个技术题按三段答：<strong>结论一句话 → 原理展开 → 例子/数字收尾</strong>。</p>
+<p>示例（"KV Cache 是什么"）：</p>
+<blockquote>
+<p>结论：KV Cache 是把历史 token 的 K、V 缓存起来、避免每生成一个 token 就重算全部历史的机制。
+原理：自回归解码时新 token 只需要自己的 q 与所有历史 k、v 做注意力，K/V 不随生成改变，所以可以缓存；大小 = 2×层数×KV头数×头维×序列长×精度字节。
+例子：7B 模型 fp16 下每 token 约 0.5 MB，4k 上下文一条请求就是 2 GB——这也是为什么 GQA/MLA/量化都围绕压缩 KV cache 展开。</p>
+</blockquote>
+<hr />
+<h1 id="d0-7">第 1 章 Transformer 与模型结构</h1>
+<h2 id="d0-8">1.1 知识讲解：从语言模型到注意力</h2>
+<p>语言模型的任务是 <code>P(x_t | x_&lt;t)</code>。要让模型理解上下文，就需要一种机制把"任意位置的信息"聚合到当前位置——这就是注意力：</p>
+<pre><code>Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V
+</code></pre>
+<p>理解三步：
+1. <strong>Q·Kᵀ</strong>：每个位置对其他所有位置打分（相关性）。
+2. <strong>softmax</strong>：把分数变成权重分布（该看谁多一点）。
+3. <strong>·V</strong>：按权重加权求和内容。</p>
+<p>为什么除 √d_k：点积的方差随维度 d_k 线性增大（假设分量独立同分布，方差 ∝ d_k），方差大 → softmax 输入值过大 → 输出接近 one-hot → 梯度消失。除以 √d_k 使方差回到 O(1)。</p>
+<p>三种序列建模架构对比（背诵表）：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>RNN</th>
+<th>CNN</th>
+<th>Self-Attention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每层计算量</td>
+<td>O(T·d²)</td>
+<td>O(k·T·d²)</td>
+<td>O(T²·d)</td>
+</tr>
+<tr>
+<td>可并行性</td>
+<td>串行，无法并行</td>
+<td>并行</td>
+<td>并行</td>
+</tr>
+<tr>
+<td>任意两位置路径长度</td>
+<td>O(T)</td>
+<td>O(log T)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Transformer 标准组件速览：多头注意力 → 残差 + Norm → FFN（4d 隐层）→ 残差 + Norm，重复 N 层；现代大模型（LLaMA/Qwen/DeepSeek）的组合是 <strong>RoPE + RMSNorm(Pre-LN) + SwiGLU + GQA</strong>。</p>
+<h2 id="d0-9">1.2 真题实战</h2>
+<blockquote>
+<p><strong>真题 1</strong>（Datawhale）：请详细解释 Transformer 中的自注意力机制如何工作？为什么比 RNN 更适合处理长序列？</p>
+</blockquote>
+<p><strong>参考回答</strong>：先用上面的三步讲清计算流程，再从三个维度对比 RNN：①长程依赖——注意力任意两位置路径长度 O(1)，RNN 要逐步传递 O(T)，信息易衰减；②并行性——注意力整段可并行计算，RNN 必须串行；③可解释的聚合方式——注意力权重显式表达"看哪里"。最后补一句代价：O(T²) 复杂度，所以才有 FlashAttention、稀疏注意力这些后续优化。</p>
+<blockquote>
+<p><strong>真题 2</strong>：什么是位置编码？为什么必需？列举至少两种实现。</p>
+</blockquote>
+<p><strong>参考回答</strong>：注意力本身是"置换不变"的——打乱输入顺序输出不变，因此必须注入位置信息。实现：①正弦位置编码（不同频率 sin/cos，可线性近似相对位置，免训练）；②可学习绝对位置（BERT/GPT-2，简单但外推差）；③RoPE（旋转位置编码，主流）；④ALiBi（注意力分数加线性距离惩罚，外推好）。</p>
+<blockquote>
+<p><strong>真题 3</strong>：详细介绍 RoPE，对比绝对位置编码它的优劣势。</p>
+</blockquote>
+<p><strong>参考回答</strong>：
+- <strong>原理</strong>：把 q、k 每两个维度分成一对，在第 m 个位置对 q 施加角度 m·θ_i 的旋转（θ_i = 10000^(−2i/d)，i 为维度对序号，不同维度对不同频率）。关键性质：旋转后 ⟨R(m)q, R(n)k⟩ 的内积只依赖 <strong>m−n</strong>——实现上是绝对位置编码，效果上是相对位置编码。
+- <strong>对比绝对位置编码的优势</strong>：天然表达相对距离，外推/插值更友好（配合 PI/NTK/YaRN 可扩展到更长上下文）；不引入额外参数；与线性注意力兼容。
+- <strong>劣势</strong>：实现稍复杂（要改 Q/K 投影后的处理）；直接外推到远超训练长度仍会掉点，需要插值或微调。</p>
+<blockquote>
+<p><strong>真题 4</strong>：MHA、MQA、GQA 的区别？</p>
+</blockquote>
+<p><strong>参考回答</strong>：三者的 Q 头都一样，区别在 KV 头的数量与组织方式——MHA 每个头独立一组 KV（质量最好，KV cache 最大）；MQA 所有 Q 头共享一组 KV（cache 缩到 1/h，但质量有损）；GQA 分组共享（如 32 个 Q 头分 8 组），是两者折中，LLaMA-3、Qwen2 均采用。再加分：DeepSeek 的 <strong>MLA</strong> 走另一条路——把 KV 低秩压缩成隐向量只缓存它，cache 减约 90% 且质量接近 MHA。</p>
+<blockquote>
+<p><strong>真题 5</strong>：比较 Encoder-Only / Decoder-Only / Encoder-Decoder，各自擅长什么？</p>
+</blockquote>
+<p><strong>参考回答</strong>：Encoder-Only（BERT）双向注意力，擅长理解类任务（分类、检索、rerank）；Decoder-Only 单向 + KV cache，主流生成式大模型的选择（理由见真题 6）；Encoder-Decoder（T5/BART）条件生成任务（翻译、摘要）表达最干净，但训练效率低、架构复杂。为什么现在主流是 Decoder-only：①CLM 目标下每个 token 都产生损失，训练信号利用率高；②GPT-3 证明 zero-shot/few-shot 能力随规模涌现，scaling 友好；③单流生成与 KV cache 天然契合，推理实现简单；④所有任务统一成"续写"。</p>
+<blockquote>
+<p><strong>真题 6</strong>：你知道哪些 LLM 常用激活函数？为什么选它？</p>
+</blockquote>
+<p><strong>参考回答</strong>：ReLU → GELU（BERT/GPT-2，平滑版 ReLU，处处可导且有小负值区间，实验效果更好）→ <strong>SwiGLU</strong>（LLaMA/Qwen 现标配）：<code>FFN(x) = W2( Swish(W1x) ⊙ W3x )</code>，门控让网络自己学习信息通过的比例；为保持参数量不变，隐层取约 8/3·d（d=4096 → 11008）。</p>
+<blockquote>
+<p><strong>真题 7</strong>：如何理解"涌现能力"？通常在什么规模出现？</p>
+</blockquote>
+<p><strong>参考回答</strong>：涌现指小模型上几乎没有、规模跨过某个阈值后突然出现的能力（如 ICL 少样本学习、CoT 多步推理）。常见解释有两派：①真实相变，任务需要多步正确组合，单步成功率提升在多步任务上呈指数放大；②度量假象——不连续指标（exact match）造成的人为跳变，换成连续指标后能力平滑增长。规模上没有统一定论，一般说 10B～百亿到千亿级（GPT-3 175B 显现 ICL）。回答时给两派观点，展示你了解争议。</p>
+<blockquote>
+<p><strong>真题 8</strong>：NLP 和 LLM 最大的区别是什么？</p>
+</blockquote>
+<p><strong>参考回答</strong>（开放题，给框架）：范式上从"任务专属模型"（每个任务标注数据 + 微调 BERT）变成"通用基座 + 提示/对齐"（一个模型 + 指令解决所有任务）；能力上从"表示学习"到"世界知识 + 推理 + 指令遵循"；工程上从训练小模型变成数据工程 + 对齐 + 推理服务。共同点：底座仍是语言建模与 Transformer。</p>
+<h2 id="d0-10">1.3 加分项</h2>
+<ul>
+<li>能现场推导 attention 对 d_k 的方差分析（上面 1.1 的内容写出来）。</li>
+<li>知道 <strong>Pre-LN vs Post-LN</strong>：Post-LN（原始 Transformer）深层训练不稳、必须 warmup；Pre-LN 梯度经残差直通、训练稳，是现代标配；RMSNorm 去掉均值中心化省计算。</li>
+<li>被问"读过哪些模型"：能说清 <strong>LLaMA 系</strong>（RoPE+RMSNorm+SwiGLU 的开源模板）、<strong>Qwen</strong>（词表扩展、长上下文、GQA）、<strong>DeepSeek-V3</strong>（MLA、细粒度 MoE+共享专家、MTP 多 token 预测、FP8 训练）、<strong>R1</strong>（RLVR 涌现长 CoT）——面试官常顺着你说的往下问，别说不熟的。</li>
+</ul>
+<hr />
+<h1 id="d0-11">第 2 章 Tokenizer 与词表</h1>
+<h2 id="d0-12">2.1 知识讲解</h2>
+<p>神经网络不能直接吃文本，要切成 token。<strong>子词算法</strong>在"词表大小"与"无 OOV"之间取平衡：</p>
+<ul>
+<li><strong>BPE</strong>（GPT 系）：从字符开始，迭代合并语料中最高频的相邻 pair。<strong>Byte-level BPE</strong> 以 256 字节为基础，任何字符都可表示，彻底无 OOV。</li>
+<li><strong>WordPiece</strong>（BERT）：合并"使似然提升最大"的 pair，子词加 <code>##</code> 前缀。</li>
+<li><strong>Unigram</strong>（SentencePiece 选项）：先建大词表，按概率模型逐步剪枝。</li>
+<li><strong>SentencePiece</strong>：语言无关框架，空格转为 <code>▁</code>，切分可逆，中日文友好。</li>
+</ul>
+<p>词表大小的权衡（高频追问）：大词表 → 压缩率高（同内容 token 少 → prefill 快、KV cache 小、多语言覆盖好）；代价 → embedding + lm_head 参数大、低频 token 训练不充分。主流从 32k（LLaMA-1）涨到 128k–152k（LLaMA-3/Qwen）。中文在英文为主词表下常被切成多个 byte token，解法是扩词表 + 继续训练。</p>
+<h2 id="d0-13">2.2 真题实战</h2>
+<blockquote>
+<p><strong>真题</strong>：比较 BPE 和 WordPiece。</p>
+</blockquote>
+<p><strong>参考回答</strong>：都是自底向上的合并算法，区别在<strong>合并的标准</strong>：BPE 按频率（合并最高频 pair，统计驱动、简单高效）；WordPiece 按互信息/似然增益（合并后对语言模型似然提升最大的 pair，更"概率"导向）。工程上：GPT/LLaMA 用 byte-level BPE，BERT 用 WordPiece，SentencePiece 是把两者（含 Unigram）包起来的语言无关实现。</p>
+<hr />
+<h1 id="d0-14">第 3 章 预训练与训练工程</h1>
+<h2 id="d0-15">3.1 知识讲解</h2>
+<p><strong>训练目标</strong>：CLM（主流，每 token 有损失）；MLM（BERT，15% mask，理解任务强但信号少）；Span corruption（T5）。</p>
+<p><strong>数据工程</strong>（大厂高频考点）：获取 → 清洗（语言识别、长度、Gopher 启发式规则、质量分类器）→ <strong>去重</strong>（精确 hash + MinHash-LSH 近似去重）→ 配比混合（高质量源上采样，代码数据对推理有正迁移）→ <strong>去污染</strong>（删掉与评测集 n-gram 重叠样本）。</p>
+<p><strong>Scaling Laws</strong>：
+- Kaplan 2020：loss 随参数/数据/算力呈幂律；同算力优先加大模型。
+- Chinchilla 2022：计算最优配置 <strong>tokens ≈ 20×参数</strong>（70B+1.4T 打败 280B）。
+- 工程现实：为省推理成本常"过度训练"小模型（LLaMA-3 8B 用了 15T token）。</p>
+<p><strong>混合精度</strong>：fp16 范围小需要 loss scaling；bf16 指数位同 fp32 不需要，Ampere 后默认；始终保留 fp32 master 权重。</p>
+<p><strong>分布式并行</strong>（必考）：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>切什么</th>
+<th>通信特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DP/ZeRO-1/2/3</td>
+<td>数据</td>
+<td>ZeRO 依次切优化器状态/梯度/参数，阶段 3 ≈ FSDP</td>
+</tr>
+<tr>
+<td>TP</td>
+<td>层内权重矩阵</td>
+<td>每层 2 次 all-reduce，通信重 → 节点内 NVLink</td>
+</tr>
+<tr>
+<td>PP</td>
+<td>按层切 stage</td>
+<td>只传 stage 边界激活；bubble = (p−1)/(m+p−1)，1F1B 降激活显存</td>
+</tr>
+<tr>
+<td>EP</td>
+<td>MoE expert</td>
+<td>all-to-all</td>
+</tr>
+<tr>
+<td>CP/SP</td>
+<td>序列维度</td>
+<td>ring attention，长上下文用</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>MoE</strong>：FFN 换成 N 个 expert + router top-k；需负载均衡（aux loss 或 DeepSeek 的无梯度 bias）；总参大激活小（DeepSeek-V3：671B 总/37B 激活）。</p>
+<h2 id="d0-16">3.2 真题实战</h2>
+<blockquote>
+<p><strong>真题 1</strong>（Datawhale）：Scaling Laws 揭示了什么关系？对研发有什么指导意义？</p>
+</blockquote>
+<p><strong>参考回答</strong>：loss 与参数量 N、数据量 D、算力 C 呈幂律关系 <code>L ∝ N^−α · D^−β · C^−γ</code>。指导意义三层：①给定算力预算，可以<strong>提前外推</strong>训练效果（用小模型拟合曲线预测大模型 loss），降低大模型赌错的风险；②Chinchilla 给出计算最优的 N:D ≈ 1:20 配比；③实际还要考虑推理成本——部署量大的场景会偏离计算最优、过度训练小模型。这一问能体现"研究 → 工程"的转化思维。</p>
+<blockquote>
+<p><strong>真题 2</strong>：MoE 如何在不显著增加推理成本的情况下扩大参数规模？</p>
+</blockquote>
+<p><strong>参考回答</strong>：核心是<strong>稀疏激活</strong>——总参数变大（专家变多）但每个 token 只路由到 top-k（1~2）个专家，FLOPs 只与激活参数有关。配套三件事：①负载均衡损失防止路由塌缩；②expert parallel 把专家切到不同卡（all-to-all 通信）；③共享专家/细粒度专家（DeepSeek-V3）提升参数效率。代价：显存占用大、训练路由不稳、通信开销。</p>
+<blockquote>
+<p><strong>真题 3</strong>（Datawhale）：训练百/千亿参数级 LLM 会面临哪些工程和算法挑战？</p>
+</blockquote>
+<p><strong>参考回答</strong>（结构化回答模板，这题就是考框架感）：
+1. <strong>显存</strong>：参数+梯度+优化器状态约 16 字节/参数，7B 训练就要 112 GB → ZeRO/TP/PP/激活重计算。
+2. <strong>算力与并行</strong>：单次训练 10²² FLOPs 级，必须 3D 并行 + 高 MFU；通信与计算重叠。
+3. <strong>稳定性</strong>：loss spike（脏数据/数值溢出）→ 梯度裁剪、warmup、回滚恢复策略。
+4. <strong>数据</strong>：TB 级清洗去重管线、配比实验、评测去污染。
+5. <strong>算法</strong>：scaling 曲线预测、超参迁移（小模型调参外推大模型）、数据课程。
+6. <strong>评测</strong>：训练中持续评测 + 能力基准，避免训完才发现问题。</p>
+<blockquote>
+<p><strong>真题 4</strong>：Qwen/DeepSeek 的创新点主要在哪？</p>
+</blockquote>
+<p><strong>参考回答</strong>（挑熟的展开）：DeepSeek-V3：<strong>MLA</strong>（KV 低秩压缩）、<strong>细粒度 MoE + 共享专家</strong>、<strong>MTP</strong> 多 token 预测目标（训练信号更密 + 推理可用投机解码）、<strong>FP8 混合精度训练</strong>（大规模验证可行）、无辅助损失的负载均衡；R1：纯 RLVR 涌现长 CoT 与反思。Qwen：多语言词表与数据、GQA + 长上下文扩展（YaRN 系）、从 dense 到 MoE 的系列化。答这题的诀窍：<strong>每个创新点都答"解决什么问题"</strong>，比如 MLA 是为了解决 KV cache 显存瓶颈。</p>
+<h2 id="d0-17">3.3 加分项：显存与成本估算（必考计算题）</h2>
+<p><strong>训练 7B（bf16 + AdamW）</strong>：权重 2B/参 + 梯度 2B/参 + fp32 master/动量/方差 12B/参 = 16B/参 → <strong>112 GB + 激活</strong> → 单卡 80G 放不下，需 ZeRO-3 或 LoRA（可训练参数仅 0.5%，单卡 48G 甚至 24G 可行）。</p>
+<p><strong>训练时长万能公式</strong>：<code>FLOPs ≈ 6·N·D</code>。
+例：7B × 1T token = 4.2e22 FLOPs；A100 有效算力 ≈ 312 TFLOPS × MFU 40% ≈ 1.25e14 → 单卡约 10.7 年 → <strong>64 卡约 60 天</strong>。</p>
+<p><strong>KV Cache</strong>：<code>2 × n_layers × n_kv_heads × d_head × seq × batch × dtype_bytes</code>；7B fp16 ≈ 0.5 MB/token，4k 上下文 ≈ 2 GB/请求。</p>
+<hr />
+<h1 id="d0-18">第 4 章 SFT 与参数高效微调（LoRA 专题）</h1>
+<h2 id="d0-19">4.1 知识讲解</h2>
+<p><strong>SFT 实操要点</strong>（项目面试必问）：
+- 数据格式：(instruction, response) 对 + chat template；<strong>loss mask 只对回复部分计算</strong>。
+- 数据质量 &gt; 数量（LIMA 用约 1k 精选数据对齐成功）；高质量 CoT 数据提升推理。
+- 超参：全参 lr 1e-5～2e-5、1–3 epoch；过拟合信号 = 通用能力下降。
+- <strong>灾难性遗忘</strong>缓解：混入通用数据（常见 5:1）、小 lr、少 epoch、LoRA。</p>
+<p><strong>LoRA 原理</strong>：微调更新量 ΔW 是低秩的 → 用 <code>ΔW = B·A</code>（A∈R^(r×k) 高斯初始化，B∈R^(d×r) <strong>零初始化</strong>保证起点等价原模型）。只训 A/B，参数量 ≈ r(d+k)。推理前可 merge 回基座，<strong>零额外延迟</strong>。</p>
+<p><strong>QLoRA 三件套</strong>：NF4 4-bit 冻结基座 + Double Quantization（量化常数再量化）+ Paged Optimizer（显存尖峰换页）。65B 可单卡 48G 微调。</p>
+<h2 id="d0-20">4.2 真题实战</h2>
+<blockquote>
+<p><strong>真题 1</strong>：LoRA 为什么能加速训练、省显存？</p>
+</blockquote>
+<p><strong>参考回答</strong>：省显存——可训练参数从 100% 降到 &lt;1%，优化器状态（Adam 的 m、v 是参数量的 2 倍）和梯度只对 LoRA 参数分配；加速——反向传播计算量大减（不需要给全部权重算梯度），且可冻结的基座权重可以量化存储（QLoRA）；同时 optimizer step 也变快。注意辨析：<strong>前向计算量没有减少</strong>（还是要过基座），省的是梯度和优化器。</p>
+<blockquote>
+<p><strong>真题 2</strong>：LoRA 的秩 r 怎么选？作用在哪些层？</p>
+</blockquote>
+<p><strong>参考回答</strong>：r=8～64 常见。任务与基座能力差距小（对话风格）r=8 够；领域差距大（专业代码、小语种）加大到 32–64，再大收益递减。α 通常取 r 或 2r（有效缩放 α/r）。作用层：q/k/v/o 投影是标配，实验表明 <strong>加上 MLP 层（up/down/gate）通常更好</strong>；不建议作用于 embedding 和 lm_head（词表大、参数多，性价比低，且动 embedding 容易破坏词向量空间）。</p>
+<blockquote>
+<p><strong>真题 3</strong>：什么场景选 LoRA，什么场景必须全参微调？</p>
+</blockquote>
+<p><strong>参考回答</strong>：LoRA 适合——领域与基座分布接近、算力有限、需要多任务多租户（一个基座挂多个 LoRA 热切换）、后期要 merge 无损部署。全参适合——领域差距大、数据量大（百万级以上）、追求极致效果（对齐训练、继续预训练）。中间态：LoRA + 更高 rank + 更多目标层 ≈ 接近全参效果。</p>
+<blockquote>
+<p><strong>真题 4</strong>：QLoRA 为什么要用 NF4？为什么 4-bit 权重还能训练？</p>
+</blockquote>
+<p><strong>参考回答</strong>：NF4（NormalFloat4）是针对<strong>正态分布权重</strong>设计的信息论最优量化码本——预训练权重大致服从零均值正态，NF4 的分位点使每个 4-bit 码均匀覆盖分布的分位数，比均匀 INT4 量化误差更小。能训练：4-bit 权重只存基座（冻结），反传时<strong>按需反量化到 bf16 参与矩阵乘</strong>，梯度只流向 LoRA 的 bf16 参数，所以精度可控。</p>
+<h2 id="d0-21">4.3 加分项</h2>
+<ul>
+<li><strong>多 LoRA 服务</strong>：S-LoRA/vLLM 支持一个基座同时服务上百个 LoRA，这是"为什么 LoRA 工程价值大"的最好例子。</li>
+<li>微调数据从哪来（项目必问）：人工标注、开源指令集清洗、self-instruct/强模型蒸馏、业务日志脱敏——各自的质量与合规风险要能说。</li>
+</ul>
+<hr />
+<h1 id="d0-22">第 5 章 对齐：RLHF / DPO / GRPO</h1>
+<h2 id="d0-23">5.1 知识讲解：三阶段流程图</h2>
+<pre><code>预训练模型 → [SFT] → SFT模型 → [奖励建模 RM] → RM → [RL 优化 PPO/GRPO] → 对齐模型
+                                    ↑                    ↑
+                              人类偏好对标注          RM 打分 + KL 约束
+</code></pre>
+<ul>
+<li><strong>RM</strong>：Bradley-Terry 模型，<code>P(y_w ≻ y_l) = σ(r(y_w) − r(y_l))</code>，loss = −log σ(r_w − r_l)。</li>
+<li><strong>PPO</strong>：目标 = clipped 目标 − β·KL(π_θ‖π_ref)；显存里同时有 <strong>actor / critic / ref / RM 四个模型</strong>——这是 GRPO/DPO 出现的直接动机。</li>
+<li><strong>DPO</strong>：KL 约束 RLHF 有闭式最优解 π* ∝ π_ref·exp(r/β)，反解奖励代回 BT 得损失：
+  <code>L = −log σ(β·log[π_θ(y_w)/π_ref(y_w)] − β·log[π_θ(y_l)/π_ref(y_l)])</code>——直接在偏好对上训练，无 RM、无在线采样。</li>
+<li><strong>GRPO</strong>（DeepSeek）：每 prompt 采 G 个回答，组内归一化奖励当优势，<strong>去掉 critic</strong>；配合 RLVR（可验证奖励：数学精确匹配、代码单测）支撑了 R1 类推理模型。</li>
+</ul>
+<h2 id="d0-24">5.2 真题实战（Datawhale 对齐 13 题精选）</h2>
+<blockquote>
+<p><strong>真题 1</strong>：与 SFT 相比，RLHF 旨在解决什么？为什么 SFT 不够？</p>
+</blockquote>
+<p><strong>参考回答</strong>：SFT 是"模仿"——只能学到演示数据中出现过的行为，无法表达"这个回答比那个好"的<strong>偏好序</strong>，且人类很难写出"完美的示范"（会写好答案，但难以枚举所有坏情况）。RLHF 直接优化偏好，能：①压掉 SFT 模型的低质量输出模式；②对齐人类主观偏好（语气、格式、安全性）；③在"好/更好"这种细粒度上超越示范数据的天花板。一句话：<strong>SFT 教"什么是对的"，RLHF 教"什么更好"</strong>。</p>
+<blockquote>
+<p><strong>真题 2</strong>：为什么 RM 用成对比较而不是绝对打分？</p>
+</blockquote>
+<p><strong>参考回答</strong>：绝对分数存在<strong>标注者间/标注者内不一致</strong>（不同人对 7 分标准不同、同一人前后不一致），而"A 比 B 好"的相对判断稳定得多、标注成本低、也更容易区分接近的回答。劣势：①成对数据只提供序关系，奖励的绝对尺度不可比；②数据量需求更大（组合爆炸）；③存在标注者偏好噪声（偏爱长回答/自信语气）会进 RM。</p>
+<blockquote>
+<p><strong>真题 3</strong>：为什么用 PPO 而不是 REINFORCE 或 Q-learning？KL 惩罚起什么作用？</p>
+</blockquote>
+<p><strong>参考回答</strong>：REINFORCE 方差大、样本效率低、无 clip 保护；Q-learning 系（值函数方法）在动作空间为整段文本（序列级、维度爆炸）时不可行。PPO 是 on-policy 策略梯度 + importance sampling 复用一批数据多次更新 + clip 限制步长，在"序列生成"这种高方差场景稳定。<strong>KL 惩罚</strong>把策略拴在 ref（SFT）附近：①防 reward hacking（RM 只是人类偏好的有损代理，拉太远必钻空子）；②防语言能力退化（乱码、重复、外语夹杂）；③让训练信号集中在"改变什么"而不用重学语言基础。</p>
+<blockquote>
+<p><strong>真题 4</strong>：β 过大或过小分别会怎样？</p>
+</blockquote>
+<p><strong>参考回答</strong>：β 过大 → 策略被锁死在 SFT 附近，奖励提升不动，RLHF 学不到东西（趋近于 SFT 模型）；β 过小 → 策略自由探索 → reward hacking、语言退化、KL 爆炸。调法：监控 KL 曲线（常见目标维持在一个 token 平均几 nats），KL 超限则加大 β 或提前停；也有自适应 KL 控制器（KL 高于目标就升 β）。</p>
+<blockquote>
+<p><strong>真题 5</strong>：什么是 reward hacking？举一个具体例子和缓解策略。</p>
+</blockquote>
+<p><strong>参考回答</strong>：RM 只是人类偏好的代理模型，策略会优化"代理分"而非"人类真实偏好"。例子：RM 偏好长回答 → 模型学会写又长又空的废话；RM 偏好礼貌 → 模型堆砌"非常好的问题！"；代码 RM 偏好编译通过 → 模型写 <code>pass</code> 空壳。缓解：KL 约束、RM 定期用新标注更新（对抗迭代）、奖励归一化/长度惩罚、多 RM 集成或 debated RM、最终靠人类评估兜底。</p>
+<blockquote>
+<p><strong>真题 6</strong>：DPO 的核心思想？与 PPO 的主要区别和优劣？</p>
+</blockquote>
+<p><strong>参考回答</strong>：见 5.1 推导，核心是<strong>把奖励学习与策略优化合并成对偏好对的直接分类问题</strong>（隐式奖励 = β·log π/π_ref）。优点：无 RM 无采样，实现简单、稳定、省显存。缺点：<strong>离线</strong>——无法根据当前策略生成新数据探索，对数据分布敏感，样本效率低；推理类任务上普遍弱于调好的在线 RL。一句话总结：DPO 是"便宜、稳、上限低"，PPO/GRPO 是"贵、难调、上限高"。</p>
+<blockquote>
+<p><strong>真题 7</strong>：GRPO 和 PPO 的区别？优劣？</p>
+</blockquote>
+<p><strong>参考回答</strong>：优势估计的来源不同——PPO 用学出来的 value network + GAE；GRPO 对每个 prompt 采样一组（如 8 个）回答，用<strong>组内奖励的归一化值</strong>当优势，critic 整个删掉。优点：省一半训练显存、超参少、天然适配"有标准答案可自动打分"的 RLVR 场景。缺点：每个 prompt 要采样一组（推理开销大）；优势质量依赖组内奖励区分度（全对/全错组无梯度）；相对 PPO 少了 value 的低方差估计，某些场景更抖。</p>
+<blockquote>
+<p><strong>真题 8</strong>：GSPO / DAPO 听说过吗？与 GRPO 什么区别？</p>
+</blockquote>
+<p><strong>参考回答</strong>（一句话级别即可，说清动机）：都是对 GRPO 类算法的稳定性改进。<strong>GSPO</strong>（Qwen 团队）：把 importance ratio 从 token 级改成<strong>序列级</strong>再裁剪——MoE 训练中 token 级 ratio 噪声大、易训崩，序列级更稳。<strong>DAPO</strong>（字节）：四个改动——clip-higher（放宽上界裁剪鼓励探索）、动态采样（过滤全对/全错的无效组）、token 级损失归一化、超长样本奖励整形；核心都是提升 RLVR 训练的探索效率与稳定性。答不出来也没关系，坦白"了解动机、没读过细节"好过硬编。</p>
+<blockquote>
+<p><strong>真题 9</strong>：RLHF 后离线评估很好，上线后回答模式化、奉承、缺乏信息量，可能原因和解决思路？</p>
+</blockquote>
+<p><strong>参考回答</strong>（排查型问题，按层答）：①<strong>RM 过拟合标注偏好</strong>——标注者偏爱长/客气/确定语气 → 模型放大这些特征（sycophancy）。解法：偏好标注去噪、RM 更新、加长度惩罚。②<strong>KL 太小或奖励尺度问题</strong> → 策略钻空子。③<strong>离线评估集与线上分布不一致</strong>——评测题模式固定，模型只会答"考题"。解法：动态评测集、线上 A/B + 用户信号。④<strong>SFT 数据模式化</strong>本身如此，RLHF 放大。系统性方案：bad case 收集回流 → 数据飞轮。</p>
+<blockquote>
+<p><strong>真题 10</strong>：如何解决信用分配问题？token 级和序列级奖励有何不同？</p>
+</blockquote>
+<p><strong>参考回答</strong>：序列级奖励（ORM：答案对错）无法指出"哪几步导致错误"——长 CoT 中噪声大；token/步级信用分配方法：①<strong>PRM 过程奖励模型</strong>对每个推理步打分；②GAE 用 value function 折扣回传（PPO）；③GRPO 用序列级优势均摊到所有 token（粗糙但免 critic）。趋势：推理模型用 RLVR + 组相对优势，牺牲步级精度换取可扩展性；PRM 用于筛选数据和验证。</p>
+<blockquote>
+<p><strong>真题 11</strong>：谈谈对 RLAIF 的理解，潜力和风险？</p>
+</blockquote>
+<p><strong>参考回答</strong>：用 LLM 代替人类标注偏好（Anthropic 的 Constitutional AI 是代表）。潜力：标注成本降 1–2 个数量级、可大规模生成、标准一致。风险：judge 模型自身的偏见被系统性继承（自我偏好、长度偏好）、模型"近亲繁殖"导致多样性下降、价值对齐取决于 constitution 本身的质量。实践常"AI 初筛 + 人工抽检"混合。</p>
+<h2 id="d0-25">5.3 加分项</h2>
+<ul>
+<li>能画出 PPO 训练时的数据流：prompt → actor 采样 → RM 打分 → 与 ref 算 KL → GAE 算优势 → 更新 actor 与 critic。</li>
+<li>知道 <strong>KTO</strong>（非成对数据）、<strong>ORPO</strong>（单阶段无需 ref）、<strong>SimPO</strong>（长度归一化无 ref）一句话区别。</li>
+<li>关注过 <strong>o1/R1 范式</strong>：RLVR + 长 CoT + test-time compute（推理时多想），并能讨论"为什么推理模型回答变慢变贵、什么时候值得"。</li>
+</ul>
+<hr />
+<h1 id="d0-26">第 6 章 推理与部署</h1>
+<h2 id="d0-27">6.1 知识讲解：prefill 与 decode 是两件事（必考）</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Prefill（处理 prompt）</th>
+<th>Decode（逐 token 生成）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算形态</td>
+<td>整段并行，矩阵乘饱满</td>
+<td>每步 1 个 token，GEMV</td>
+</tr>
+<tr>
+<td>瓶颈</td>
+<td><strong>计算瓶颈 compute-bound</strong></td>
+<td><strong>显存带宽瓶颈 memory-bound</strong></td>
+</tr>
+<tr>
+<td>指标</td>
+<td>TTFT（首 token 延迟）</td>
+<td>TPOT（每 token 延迟）</td>
+</tr>
+</tbody>
+</table></div>
+<p>推论：decode 阶段加大 batch 几乎不增加单步延迟（权重加载被摊薄）→ 吞吐靠大 batch；优化 TTFT 靠更快 kernel、chunked prefill、prefix cache；优化吞吐靠 continuous batching、投机解码、量化。</p>
+<p><strong>vLLM 两大贡献</strong>：①<strong>PagedAttention</strong>——KV cache 按固定 block 分页 + 块表管理（类比虚拟内存），消灭内外碎片、支持 copy-on-write 共享 → 并发 batch 更大 → 吞吐数倍提升；②<strong>Continuous batching</strong>——迭代级调度，随完随走。</p>
+<p><strong>量化速查</strong>：难点是<strong>激活离群值集中在少数通道</strong>。LLM.int8（outlier 拆出来 fp16 算）；SmoothQuant（outlier 迁移到权重，W8A8）；GPTQ（逐层 Hessian 误差补偿，W4）；AWQ（激活感知保护显著通道，W4，更鲁棒）；FP8（Hopper 原生）。W4A16 通常掉点 1–2% 内。</p>
+<p><strong>投机解码</strong>：草稿模型起草 k 个 → 大模型一次前向并行验证 → 拒绝采样（保证输出分布与大模型单独采样<strong>完全一致</strong>，无损）。有效原因：decode 是带宽瓶颈，一次前向验证 k 个 token 把带宽用满。变体：Medusa/EAGLE（自草稿）、n-gram lookup。</p>
+<h2 id="d0-28">6.2 真题实战</h2>
+<blockquote>
+<p><strong>真题 1</strong>：解释 Greedy / Beam Search / Top-K / Top-P 的原理和优缺点。</p>
+</blockquote>
+<p><strong>参考回答</strong>：Greedy 每步取最大——快、确定，但易重复、呆板；Beam Search 维护 k 条候选序列——适合翻译/摘要等有明确答案的任务，<strong>开放式对话中产出通用、平淡、高概率的"安全话"</strong>，且贵；Top-K 每步只在概率前 k 里采样——k 固定不自适应（有时前 5 个词占 95%，有时前 500 才到）；Top-P（nucleus）取累计概率达 p 的最小候选集——候选数随分布自适应，是对话生成默认。工程配套：temperature 控制分布锐度，repetition/frequency/presence penalty 压重复。</p>
+<blockquote>
+<p><strong>真题 2</strong>（DeepSeek 面经方向）：KV Cache 为什么能加速？显存怎么算？有什么压缩手段？</p>
+</blockquote>
+<p><strong>参考回答</strong>：能加速的原因——自回归生成时历史 token 的 K/V 不变，缓存后每步只算新 token 的 q 与"缓存 K/V + 新 K/V"的注意力，把每步 O(T²·d) 降为 O(T·d)。大小公式 + 7B 例子（0.5 MB/token，4k 上下文 2 GB/请求）。压缩四条路：①结构上 GQA/MQA/MLA（少存 KV 头或压缩到隐向量）；②数值上 KV 量化（FP8/INT4）；③算法上淘汰/合并（H2O、SnapKV，只留重要 token）；④系统上 PagedAttention 分页 + prefix cache 跨请求复用。</p>
+<blockquote>
+<p><strong>真题 3</strong>：为什么推理加速常用"权重 INT4 量化"，而激活量化更难？</p>
+</blockquote>
+<p><strong>参考回答</strong>：LLM 激活存在系统性离群值——少数通道幅值比其他大几个数量级，INT8 线性量化直接被这些离群值撑爆 scale，其余通道精度崩掉。解法：LLM.int8 把 outlier 通道拆出用 fp16；SmoothQuant 用等效缩放把 outlier 从激活搬到权重（权重没有这种极端离群）；或干脆只量化权重（W4A16），激活保持 fp16——这是当前主流。AWQ 进一步发现只需保护约 1% 的显著权重通道，用激活分布指导缩放。</p>
+<blockquote>
+<p><strong>真题 4</strong>：投机解码为什么能保证输出分布不变？什么时候收益最大？</p>
+</blockquote>
+<p><strong>参考回答</strong>：接受概率 min(1, p(x)/q(x))，拒绝时从<strong>残差分布 max(p−q, 0) 归一化后重采样</strong>——数学上可证明这等价于直接从目标分布 p 采样（这是拒绝采样的标准结论），所以无损。收益条件：①decode 是带宽瓶颈（小 batch 才明显，batch 很大时 GPU 已算满，收益趋零）；②草稿接受率高（草稿与目标分布接近、任务模式性强，如代码）；③草稿模型足够小（通常 1/10 大小）。</p>
+<blockquote>
+<p><strong>真题 5</strong>：线上服务 QPS 突增、TTFT 毛刺，怎么排查优化？</p>
+</blockquote>
+<p><strong>参考回答</strong>（系统题模板）：先看监控分层定位——请求排队（batch 满）→ prefill 排队（长 prompt）→ KV 显存不足触发抢占/换页。优化清单：prefix caching 复用 system prompt；chunked prefill 让长请求不被整段独占；调大 max_num_seqs/KV block；显存不够上 KV 量化或加卡；超长上下文请求限流；SLO 分级（对话类保 TPOT、批处理类保吞吐）。</p>
+<hr />
+<h1 id="d0-29">第 7 章 RAG</h1>
+<h2 id="d0-30">7.1 知识讲解：完整链路</h2>
+<pre><code>【索引阶段】文档加载 → 解析(布局感知) → 切分 chunking → Embedding → 入向量库
+【查询阶段】Query 预处理(改写/扩展) → 召回(混合检索) → 粗排 → Rerank 精排 → 拼 Prompt
+           → LLM 生成(带引用) → 评估
+</code></pre>
+<p>各环节要点：
+- <strong>切分</strong>：固定长度+overlap（512–1024 / 10–20% 重叠）是基线；递归分割、语义切分、<strong>Parent-Child</strong>（小块检索、父块生成）更优；PDF/表格要布局感知解析。
+- <strong>召回</strong>：<strong>混合检索</strong>（BM25 + 向量，RRF 融合）——关键词精确匹配（型号/代码）与语义泛化互补；向量索引 HNSW（图索引，ef 调召回/速度）或 IVF-PQ。
+- <strong>重排</strong>：cross-encoder（如 bge-reranker）对 (query, passage) 联合编码，精但贵 → 只精排 top 20–50。
+- <strong>查询优化</strong>：改写（口语→检索友好）、多查询、<strong>HyDE</strong>（先生成假设答案再检索）、多跳分解。</p>
+<h2 id="d0-31">7.2 真题实战：RAG 夺命十连问（逐题讲解）</h2>
+<blockquote>
+<p><strong>问 1：什么是 RAG？解决了大模型哪些痛点？</strong></p>
+</blockquote>
+<p>不要只答"检索+生成"。答三层：①定义——生成前先从外部知识库检索相关内容，让模型"开卷考试"；②三大痛点——知识时效性（训练截止日期）、幻觉（答案可溯源到引用）、私有数据（模型没见过的企业内部知识）；③加分——演进路线 Naive → Advanced（重排/混合检索）→ Modular → Graph → Agentic RAG。</p>
+<blockquote>
+<p><strong>问 2：RAG 和微调怎么选？</strong></p>
+</blockquote>
+<p>先给判断标准再给组合：知识频繁更新/需溯源/预算有限 → RAG；领域风格与行为深度适配/低延迟/输出格式严格 → SFT。<strong>生产最佳实践是组合</strong>——SFT 教模型"怎么答"（风格、引用格式），RAG 供"答什么"（实时知识）。</p>
+<blockquote>
+<p><strong>问 3：完整流程？</strong></p>
+</blockquote>
+<p>索引阶段 + 查询阶段两段讲（见 7.1），每个环节能多说一句技术选型。</p>
+<blockquote>
+<p><strong>问 4：Chunk 大小和 Overlap 怎么定？</strong></p>
+</blockquote>
+<p>不是拍脑袋：chunk 太小 → 语义被切断、检索到的片段缺上下文；太大 → 噪声多、embedding 语义稀释、prompt 变贵。经验值 512–1024 token、overlap 10–20%，<strong>最终靠评测集 A/B 定</strong>——这句话是关键，体现工程素养。</p>
+<blockquote>
+<p><strong>问 5：如何提升检索准确率（至少三种）？</strong></p>
+</blockquote>
+<p>混合检索（BM25+dense，RRF 融合）、查询重写/多查询/HyDE、Rerank 精排、元数据过滤、微调 embedding 模型（领域数据对比学习）、Parent-Child 切分。能说"先分析 bad case 是召回问题还是排序问题，再对症下药"是亮点。</p>
+<blockquote>
+<p><strong>问 6：如何评估 RAG 系统？</strong></p>
+</blockquote>
+<p>分两层：检索层 recall@k / MRR / nDCG（需要标注 golden chunk）；生成层 <strong>RAGAS 三元组</strong>——忠实度（答案是否忠于上下文）、答案相关性、上下文召回率。端到端再配人工评估 + 线上用户反馈。这题答不出来基本暴露没做过 RAG。</p>
+<blockquote>
+<p><strong>问 7：RAG 常见问题及解决方案？</strong></p>
+</blockquote>
+<p>准备 3–4 个能讲深的：内容缺失（知识库没覆盖 → 补数据/触发兜底话术）、召回了但排后面（rerank）、表格/SQL 弱（表格单独抽取+text-to-SQL 混合架构）、复杂 PDF 解析乱（版面模型+OCR）、多跳问题（分解查询/GraphRAG）。</p>
+<blockquote>
+<p><strong>问 8：什么是 Self-RAG 和 CRAG？</strong></p>
+</blockquote>
+<p>Self-RAG：模型生成反思 token，自己决定要不要检索、评价检索结果与答案质量；CRAG：加检索质量评估器，不合格时改写查询并触发 web 搜索兜底。适用于金融/医疗等高可靠场景。一句话总结：<strong>从"总是检索"进化到"按需检索 + 检索质量把关"</strong>。</p>
+<blockquote>
+<p><strong>问 9：GraphRAG 与传统 RAG 的区别？</strong></p>
+</blockquote>
+<p>传统 RAG 用向量相似度召回片段，适合"局部事实"问题；GraphRAG 先抽实体关系建知识图谱，做图遍历 + 社区摘要，解决<strong>多跳关系推理</strong>（"A 公司和 C 公司有什么共同供应商"）和<strong>全局性问题</strong>（"这批文档的主要主题"）。代价：建图与更新成本高。</p>
+<blockquote>
+<p><strong>问 10：了解搜索系统吗？和 RAG 有什么区别？</strong></p>
+</blockquote>
+<p>搜索系统核心是"排序好的文档列表"（召回+排序+展示），RAG 是"把检索结果作为上下文生成答案"。技术栈高度重叠（召回/排序思想互通），差异在：RAG 关注上下文构造（放哪些、放前放后）、忠实性、引用；搜索关注点击率、多样性。加分：能聊 learning to rank、行为数据训练排序模型。</p>
+<h2 id="d0-32">7.3 真题实战：其他高频 RAG 题（Datawhale）</h2>
+<ul>
+<li><strong>Lost in the Middle</strong>：LLM 对长上下文开头/结尾的信息利用好、中间差（U 型曲线）。缓解：rerank 后把最相关的放前面、控制上下文长度、分而治之（map-reduce）。</li>
+<li><strong>嵌入模型怎么选/评估</strong>：MTEB/C-MTEB 榜单起步，再用<strong>自己领域的数据</strong>构造检索评测集（query-正例对）验证，领域差距大就对比学习微调。</li>
+<li><strong>知识图谱什么时候用</strong>：强关系推理、多跳、可解释路径需求高的场景；一般场景向量检索性价比更高。</li>
+<li><strong>生产部署挑战</strong>：知识更新管线（增删文档要同步更新索引）、多租户权限过滤、延迟预算（检索+rerank+生成）、成本、坏文档治理。</li>
+</ul>
+<hr />
+<h1 id="d0-33">第 8 章 Agent</h1>
+<h2 id="d0-34">8.1 知识讲解</h2>
+<p>Agent = <strong>LLM（大脑）+ 工具（手脚）+ 记忆 + 规划循环</strong>。核心循环（ReAct）：</p>
+<pre><code>Thought(思考下一步) → Action(调用工具) → Observation(得到结果) → 循环直到得出 Final Answer
+</code></pre>
+<ul>
+<li><strong>Function Calling</strong>：把工具的 name/description/JSON Schema 放进 prompt，模型输出结构化调用；这是"训练出来的能力"（模型见过工具调用格式数据），不是纯 prompt 技巧。</li>
+<li><strong>规划</strong>：CoT（单线）→ ToT（树搜索，多方案比较）→ Plan-and-Execute（先全局计划再逐步执行，计划可修正）→ Reflexion（失败后自我反思）。</li>
+<li><strong>记忆</strong>：短期=上下文窗口（满了要摘要压缩）；长期=向量库/结构化文件（用户偏好、历史任务）；经验库（Voyager 技能库思想）。</li>
+<li><strong>MCP</strong>（Model Context Protocol）：Anthropic 推出的开放协议，标准化模型↔工具/资源的连接（类比 USB-C），一次开发多客户端可用，解决 M×N 集成问题。</li>
+<li><strong>A2A</strong>（Agent-to-Agent）：不同 Agent 之间的协作协议，与 MCP（Agent↔工具）互补。</li>
+</ul>
+<h2 id="d0-35">8.2 真题实战（Datawhale Agent 13 题精选）</h2>
+<blockquote>
+<p><strong>真题 1</strong>：如何定义一个基于 LLM 的智能体？核心组件？</p>
+</blockquote>
+<p><strong>参考回答</strong>：能<strong>感知环境、自主决策、调用工具、迭代完成目标</strong>的系统。组件四件套：LLM 推理核、工具集（function calling/代码执行/检索）、记忆（短期上下文+长期存储）、规划与反思机制。可以补一句工程视角：生产里 Agent 系统的大部分代码其实是"工具注册、状态管理、错误恢复"，模型只占循环中枢。</p>
+<blockquote>
+<p><strong>真题 2</strong>：ReAct 是如何结合思维链和行动的？</p>
+</blockquote>
+<p><strong>参考回答</strong>：交替生成"推理轨迹"与"环境动作"——推理让模型总结现状、修正计划（人类"内心独白"的外化），行动获取新信息反哺推理；相比纯 CoT 优点是能<strong>根据环境反馈动态调整</strong>，缓解幻觉（事实来自 Observation 而非参数记忆）。变体：ReAct+function calling 的工程实现（结构化输出替代自由文本）。</p>
+<blockquote>
+<p><strong>真题 3</strong>：Function Calling 是怎么让 LLM 学会调用工具的？</p>
+</blockquote>
+<p><strong>参考回答</strong>：三层：①推理时——工具 schema 注入 prompt，模型按训练过的格式输出 JSON 调用，执行结果回填继续推理；②训练时——用"工具调用轨迹数据"做 SFT（甚至 RL），让模型学会"何时调用、怎么填参、怎么用结果"；③工程上——参数校验、超时重试、权限控制都在框架层兜底。追问"模型怎么知道该调哪个工具"：依赖工具 description 的语义匹配质量，所以工具描述本身就是 prompt 工程。</p>
+<blockquote>
+<p><strong>真题 4</strong>：构建复杂 Agent 最大的挑战是什么？（开放题）</p>
+</blockquote>
+<p><strong>参考回答</strong>（选两三个能讲深的）：①<strong>误差累积</strong>——多步任务每步 95% 正确率，20 步后只剩 36%；缓解：检查点回滚、子任务验证、更可靠的结构化输出。②<strong>评测困难</strong>——路径不唯一、环境非确定，难回归。③<strong>成本与延迟</strong>——循环调用 token 翻倍。④<strong>长上下文管理</strong>——历史膨胀。给一个"我们怎么解决"的例子最有说服力（见第 11 章 Agent 项目）。</p>
+<blockquote>
+<p><strong>真题 5</strong>：多智能体系统相比单 Agent 的优势与代价？</p>
+</blockquote>
+<p><strong>参考回答</strong>：优势——职责分离降低单上下文复杂度、并行加速、角色对抗提升质量（辩论式核查）。代价——通信 token 成本倍增、误差级联、编排复杂度。实用观点（面试官爱听）：<strong>能单 Agent 解决就不上多 Agent</strong>，多 Agent 的合理场景是任务天然可分解并行（如多文档分析）或需要对抗校验。</p>
+<blockquote>
+<p><strong>真题 6</strong>：用过哪些 Agent 框架？选型怎么选？评价指标是什么？</p>
+</blockquote>
+<p><strong>参考回答</strong>模板：LangChain/LangGraph（生态全、编排状态机强）、LlamaIndex（数据/RAG 侧重）、AutoGen/CrewAI（多角色协作）。选型逻辑：生产稳定性和可控性 &gt; 功能多——所以复杂生产系统倾向 LangGraph 式显式状态机而非自由循环。评价指标：任务成功率、步数/token 成本、时延、工具调用准确率、人工干预率。没深度用过的只说你真用过的，别背名词。</p>
+<blockquote>
+<p><strong>真题 7</strong>：微调过 Agent 能力吗？数据怎么收集？</p>
+</blockquote>
+<p><strong>参考回答</strong>思路：工具调用微调数据 = 任务描述 + 正确的工具调用轨迹。来源：①人工标注轨迹；②强模型蒸馏（让 GPT-4 级模型跑任务，成功的轨迹留下）；③<strong>拒绝采样</strong>——模型自己采 N 条，按最终结果对错筛选；④失败轨迹也要（负样本，教模型从工具报错中恢复）。</p>
+<hr />
+<h1 id="d0-36">第 9 章 评测、幻觉与安全</h1>
+<h2 id="d0-37">9.1 真题实战</h2>
+<blockquote>
+<p><strong>真题 1</strong>：为什么 BLEU/ROUGE 评估现代 LLM 有很大局限？</p>
+</blockquote>
+<p><strong>参考回答</strong>：它们基于 n-gram 与参考答案的字面重叠——但同一意思有无穷种表达（"很好"≈"非常棒"≈"太赞了"），重叠低不代表差；对开放式回答、多轮对话、推理过程完全失效；还偏爱短/模板化输出。现代做法：任务可验证的用规则/测试（代码跑单测、数学对答案），开放任务用 LLM-as-judge + 人工抽检。</p>
+<blockquote>
+<p><strong>真题 2</strong>：什么是 LLM-as-a-Judge？有哪些偏见？</p>
+</blockquote>
+<p><strong>参考回答</strong>：用强模型按 rubric 给回答打分/比较。优点：可扩展、便宜、能评开放式输出。偏见四个：<strong>位置偏差</strong>（偏爱先出现的）、<strong>长度偏差</strong>（偏爱长的）、<strong>自我偏好</strong>（偏爱自己生成的）、<strong>能力天花板</strong>（区分不出两个都很强的回答）。缓解：交换位置取平均、配参考答案、详细 rubric、多 judge 投票、定期与人工标注对齐校准。</p>
+<blockquote>
+<p><strong>真题 3</strong>：为什么评估 Agent 比评估 LLM 更难？</p>
+</blockquote>
+<p><strong>参考回答</strong>：①路径不唯一（同一任务多条成功路径，过程无法 exact match）；②环境非确定（工具返回会变）；③评估维度多——结果正确性之外还有步数/成本/安全性/恢复能力（过程指标）；④需要真实或仿真环境（WebArena、OSWorld、SWE-bench 搭环境跑）。所以 Agent 评测 = 结果指标 + 过程指标 + 环境构建三件事。</p>
+<blockquote>
+<p><strong>真题 4</strong>：幻觉的成因和缓解？（超高频，答框架）</p>
+</blockquote>
+<p><strong>参考回答</strong>：先分类——<strong>事实性幻觉</strong>（与客观事实不符）vs <strong>忠实性幻觉</strong>（与给定上下文不符，如摘要编内容）。成因四条：①本质是概率语言模型，优化"流利"而非"真实"；②训练数据本身有错；③模型不知道自己知识的边界（校准差），且 RLHF 放大自信/讨好；④采样随机性。缓解按层：数据层（清洗、知识注入）、训练层（RLVR 事实性奖励、教模型拒答、CoV 自检）、推理层（RAG+强制引用、self-consistency、温度调低）、系统层（输出事实核查、引用校验）。能主动说"幻觉没法根除，只能工程上控制在业务可接受范围"加分。</p>
+<blockquote>
+<p><strong>真题 5</strong>：红队测试是什么？</p>
+</blockquote>
+<p><strong>参考回答</strong>：模拟攻击者系统性地找模型漏洞——越狱（角色扮演、编码绕过、对抗后缀 GCG）、诱导有害内容、隐私泄露（训练数据记忆、成员推断）、工具滥用（Agent 场景）。产出是攻击样例集 → 反哺安全训练与过滤器 → 回归测试闭环。</p>
+<h2 id="d0-38">9.2 榜单速查表</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>榜单</th>
+<th>测什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MMLU / MMLU-Pro</td>
+<td>57 科知识（Pro 更难）</td>
+</tr>
+<tr>
+<td>GPQA</td>
+<td>研究生级科学推理</td>
+</tr>
+<tr>
+<td>GSM8K / MATH / AIME</td>
+<td>数学推理（难度递增）</td>
+</tr>
+<tr>
+<td>HumanEval / MBPP / SWE-bench</td>
+<td>代码生成 → 真实仓库修 issue</td>
+</tr>
+<tr>
+<td>MT-Bench / Arena-Hard / Chatbot Arena</td>
+<td>对话质量（judge / 人类盲测 Elo）</td>
+</tr>
+<tr>
+<td>LongBench / RULER / 大海捞针</td>
+<td>长上下文</td>
+</tr>
+<tr>
+<td>IFEval</td>
+<td>可验证的指令遵循</td>
+</tr>
+<tr>
+<td>C-Eval / CMMLU</td>
+<td>中文知识</td>
+</tr>
+<tr>
+<td>AgentBench / WebArena / OSWorld / τ-bench</td>
+<td>Agent 能力</td>
+</tr>
+</tbody>
+</table></div>
+<p>数据污染应对：去污染清洗、私有/动态评测集、人工 Arena。</p>
+<h1 id="d0-39">第 10 章 多模态</h1>
+<h2 id="d0-40">10.1 知识讲解</h2>
+<p><strong>VLM 通用架构 = 视觉编码器（ViT）+ 连接模块 + LLM</strong>。三个代表：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>连接方式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLaVA</td>
+<td>线性 MLP 投影</td>
+<td>最简单有效，视觉 token 原样进 LLM</td>
+</tr>
+<tr>
+<td>BLIP-2</td>
+<td>Q-Former（32 个可学习 query 交叉注意力压缩）</td>
+<td>少量视觉 token，两阶段预训练</td>
+</tr>
+<tr>
+<td>Flamingo</td>
+<td>Perceiver Resampler + 门控 cross-attention</td>
+<td>支持图文交错序列</td>
+</tr>
+<tr>
+<td>Qwen2-VL</td>
+<td>原生动态分辨率 + M-RoPE</td>
+<td>高分辨率友好、视频强</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>CLIP</strong>：图文双塔 + 对比学习（InfoNCE），4 亿图文对；zero-shot 分类 = 类别名做 prompt 算相似度；是大多数 VLM 的视觉塔来源。</p>
+<p>视觉 token 数 = (H/14)×(W/14)（patch 14），高分辨率图片 token 爆炸 → 压缩手段：池化、pixel shuffle、resampler、动态分辨率。训练范式：阶段 1 冻结两塔只训投影层（对齐）→ 阶段 2 端到端 SFT（视觉指令微调）。</p>
+<h2 id="d0-41">10.2 真题实战（Datawhale VLM 11 题精选）</h2>
+<blockquote>
+<p><strong>真题 1</strong>：多模态大模型的核心挑战是什么？如何实现模态对齐？</p>
+</blockquote>
+<p><strong>参考回答</strong>：核心是<strong>表示空间对齐</strong>——视觉特征（连续、高维、空间结构）与文本 token（离散、序列）分布差异大。方案谱系：轻量投影（LLaVA，靠 LLM 能力兜底）→ 中量压缩（Q-Former/resampler，学习性更强）→ 深度融合（cross-attention 插层，Flamingo）。再加数据视角：对齐靠大规模图文对预训练 + 高质量视觉指令数据微调。</p>
+<blockquote>
+<p><strong>真题 2</strong>：LLaVA / MiniGPT-4 如何连接视觉编码器与 LLM？</p>
+</blockquote>
+<p><strong>参考回答</strong>：视觉塔（CLIP ViT）抽取 patch 特征 → 投影层（LLaVA v1 是一层线性，v1.5 是两层 MLP）映射到 LLM 的 embedding 空间 → 视觉 token 作为"外语"与文本 token 拼接输入 LLM。训练两阶段：先冻结视觉塔和 LLM 训投影（图文对数据，学对齐），再做视觉指令微调（GPT-4 生成的对话/推理数据）。卖点：结构简单、成本低、效果好——说明对齐的主要瓶颈在<strong>数据</strong>不在结构。</p>
+<blockquote>
+<p><strong>真题 3</strong>：什么是视觉指令微调？为什么关键？</p>
+</blockquote>
+<p><strong>参考回答</strong>：把"图像 + 指令 + 回答"格式的数据对 VLM 做 SFT——预训练只教会了"图文对齐"，指令微调才教会它"看图听指令做事"（描述、推理、问答、OCR）。与纯文本 SFT 的区别：数据要围绕图像内容构造（描述、定位、比较、推理），否则模型会无视图像瞎答。</p>
+<blockquote>
+<p><strong>真题 4</strong>：处理视频相比静态图要额外解决什么？</p>
+</blockquote>
+<p><strong>参考回答</strong>：①token 爆炸——帧数×每帧 token 数，需要帧采样与时空压缩（时序池化）；②时序建模——帧间关系、动作因果（M-RoPE 类的时序位置编码）；③长视频记忆——分段+摘要或流式处理；④数据——视频-文本对稀缺，常用 ASR 字幕弱对齐。</p>
+<blockquote>
+<p><strong>真题 5</strong>：VLM 的幻觉与纯文本有何不同？</p>
+</blockquote>
+<p><strong>参考回答</strong>：VLM 幻觉多了一层"<strong>看没看见</strong>"的问题——模型会用语言先验脑补图像内容（图里没有的物体说有、答非所图），因为语言先验太强而视觉证据利用不足（CLIP 特征偏全局语义、细粒度差）。典型例子：问"图里几个人"，答出语言上更常见的"两个人"而不管实际。缓解：高质量定位/OCR 数据、防幻觉微调（RLAIF 判别"是否忠于图像"）、让模型显式引用图像区域（grounding）。</p>
+<hr />
+<h1 id="d0-42">第 11 章 项目面试专题（重点章）</h1>
+<blockquote>
+<p>二面基本全程聊项目。面试官挖项目不是听故事，而是在验证四件事：<strong>真实性</strong>（真做过吗）→ <strong>深度</strong>（懂原理吗）→ <strong>决策力</strong>（为什么这么选）→ <strong>迁移力</strong>（换个场景怎么办）。本章给出模板 + 四类项目的追问题库。</p>
+</blockquote>
+<h2 id="d0-43">11.1 三分钟项目介绍模板</h2>
+<p>结构（STAR 变体）：<strong>背景与指标（30s）→ 难点与方案（90s）→ 量化结果（30s）→ 个人角色（30s）</strong>。</p>
+<p>示例话术（RAG 智能问答项目）：</p>
+<blockquote>
+<p>"这个项目的背景是公司内部知识分散在 wiki、工单和 PDF 里，客服检索一条信息平均要 6 分钟。我们做了一个基于 RAG 的问答系统，我负责检索链路和效果优化。初始版本用固定 512 token 切分 + 单路向量检索，人工评估准确率只有 71%；bad case 分析发现主要问题是表格类内容和口语化 query 召回差，我们做了三件事：版面感知解析保住表格结构、BM25+向量混合检索、cross-encoder 重排，准确率提到 88%，客服单条查询时间降到 1 分钟以内。上线后我负责监控和知识库更新管线。"</p>
+</blockquote>
+<p>要点：<strong>有数字、有对比、有"我"的决策</strong>。数字不必惊人，但要真实自洽（71%→88% 要能被追问细节时撑住）。</p>
+<h2 id="d0-44">11.2 面试官的四层追问逻辑（自查清单）</h2>
+<ol>
+<li>真实性层：这个数字怎么测的？评测集多少条、谁标的？</li>
+<li>深度层：为什么这个方案有效？原理是什么？</li>
+<li>决策层：当时还考虑过什么方案？为什么不用 X？</li>
+<li>迁移层：如果数据量 ×10 / 换个行业 / 预算砍半，你会怎么调整？</li>
+</ol>
+<p><strong>准备方法</strong>：把自己的项目按这四层各准备 3 个问题自问自答。以下题库直接对着练。</p>
+<h2 id="d0-45">11.3 RAG 项目追问题库（18 问）</h2>
+<p><strong>数据与索引</strong>
+1. <em>知识库数据量多大？格式有哪些？</em> —— 给真实数字；难点 usually 在 PDF/表格/扫描件，引出版面解析。
+2. <em>chunk 大小怎么定的？试过哪些？</em> —— 说"试过 256/512/1024，在自建评测集上 A/B，512 最优"，并说出小/大 chunk 的问题。
+3. <em>为什么需要 overlap？设多少？</em> —— 防止语义被切断在边界；10–20%；overlap 太大索引冗余。
+4. <em>表格和图片怎么处理？</em> —— 表格：结构化抽取（markdown/HTML 序列化）或单独 text-to-SQL 路线；图片：多模态模型打 caption 入库或视觉 RAG。
+5. <em>embedding 模型怎么选的？</em> —— MTEB/C-MTEB 榜单初筛 → 领域评测集验证 → 领域差距大就微调（对比学习，构造难负例）。
+6. <em>向量库怎么选的？</em> —— 数据量（百万级以下 Milvus/ES 都够）、过滤需求（多租户元数据过滤）、运维成本；能说出 HNSW 的 ef 参数权衡是加分。</p>
+<p><strong>检索与生成</strong>
+7. <em>为什么用混合检索？</em> —— 向量管语义、BM25 管精确词（型号/代码/人名），RRF 融合；给一个只靠向量召回失败的具体案例。
+8. <em>rerank 用什么？为什么不用 embedding 直接排？</em> —— 双塔是独立编码快但粗；cross-encoder 联合编码准但贵 → 召回粗排+精排两级。
+9. <em>query 是口语化/带错别字怎么办？</em> —— 改写、纠错、多查询扩展、HyDE。
+10. <em>多轮对话怎么处理指代（"它多少钱"）？</em> —— 意图改写：先让 LLM 结合历史把当前 query 改写成独立完整的检索 query。
+11. <em>prompt 怎么设计的？</em> —— 检索内容 + 来源编号 + "仅依据上下文回答，找不到就说不知道" + 引用格式；防 prompt 注入（文档内容里藏指令）。
+12. <em>Lost in the middle 怎么处理？</em> —— rerank 后关键内容放两端；控制上下文长度；超多命中就分段 map-reduce。</p>
+<p><strong>效果与运营</strong>
+13. <em>准确率 88% 怎么定义和测的？</em> —— 评测集构建（问题+标准答案+golden chunk，多少条、谁标注）、指标定义（忠实度/答案正确率）、LLM-judge + 人工抽检校准。
+14. <em>bad case 怎么分析？举一个印象最深的。</em> —— 准备一个真实案例：现象 → 定位（检索没中 or 检索中了没答好）→ 归因 → 修复 → 验证。这是含金量最高的一题。
+15. <em>知识库更新怎么处理？</em> —— 增量索引、文档版本/时间戳、失效内容下架；权限过滤在检索层做。
+16. <em>线上延迟多少？瓶颈在哪？</em> —— 分段计时：检索（~50ms）+ rerank（~100–200ms）+ LLM 首 token；瓶颈通常在 LLM，rerank 是可调项。
+17. <em>为什么不用微调解决？</em> —— 回到选型：知识频繁更新+需溯源 → RAG；但可以微调"回答行为"（引用格式、拒答策略）。
+18. <em>如果预算只能保留一个优化项，留哪个？</em> —— 开放题，观点题：我会留 rerank 或评测集（没有评测集一切优化都是盲调）——说出你的理由即可。</p>
+<h2 id="d0-46">11.4 微调项目追问题库（15 问）</h2>
+<ol>
+<li><em>微调的目标是什么？为什么基座不行？</em> —— 明确"基座缺什么"：领域知识、输出格式、行为习惯，三者决定方案。</li>
+<li><em>数据从哪来？多少条？</em> —— 来源（人工/蒸馏/日志脱敏）+ 清洗流程 + 数量级；几十条到几千条都正常，关键是质量与分布。</li>
+<li><em>数据怎么清洗和构造？</em> —— 去重、去脏（乱码/超长/答非所问）、格式统一、难度和话题分布均衡；指令多样性（同任务多表达）。</li>
+<li><em>为什么选 LoRA 不选全参？</em> —— 按 4.2 真题 3 的决策框架答，结合你的数据量和算力。</li>
+<li><em>rank 和 alpha 怎么定的？作用了哪些层？</em> —— 实验对比过 r=8/32/64；qkvo+MLP。</li>
+<li><em>学习率、epoch 怎么调？</em> —— 全参 1e-5 级 / LoRA 1e-4 级；1–3 epoch；看 eval loss 和人工评测联合判断，过拟合信号（通用能力掉、只会背训练集句式）。</li>
+<li><em>loss mask 怎么做的？</em> —— 只对 response 计算 loss；为什么：不学用户输入的分布。</li>
+<li><em>多轮对话怎么构造训练样本？</em> —— 整段拼接 + 只对每轮 assistant 部分算 loss；或按轮拆分，说清你用的 chat template。</li>
+<li><em>训练中 loss 曲线什么样？有没有出过问题？</em> —— 准备一个真实小事故（lr 大了 spike、数据污染、模板错误），讲定位过程。</li>
+<li><em>怎么评估微调效果？</em> —— 自动指标（领域任务准确率）+ 人工/LLM 评分 + <strong>通用能力回归测试</strong>（防止只学了领域忘了说话）。</li>
+<li><em>微调后通用能力下降怎么办？</em> —— 混通用数据（比例怎么定的）、降 lr、减 epoch、LoRA 本身缓解。</li>
+<li><em>微调后幻觉变多吗？为什么？</em> —— 可能：SFT 教模型"总要有答案"，没教"说不知道" → 数据里加入拒答样本、知识边界样本。</li>
+<li><em>灾难性遗忘的原理是什么？</em> —— 稀疏梯度更新覆盖通用分布、小数据高 lr 的分布漂移；与多任务学习冲突同源。</li>
+<li><em>模型怎么部署？merge 了还是动态加载？</em> —— merge 零延迟 vs 多任务挂多个 LoRA 热切换，按业务答。</li>
+<li><em>效果多少？离 SOTA/预期还差什么？下一步？</em> —— 诚实 + 有 next step（数据飞轮、DPO 改风格、更优基座）。</li>
+</ol>
+<h2 id="d0-47">11.5 Agent 项目追问题库（10 问）</h2>
+<ol>
+<li><em>你的 Agent 解决什么任务？人机边界在哪？</em> —— 明确自主程度（全自动/建议制）。</li>
+<li><em>工具怎么设计的？有几个？</em> —— 工具粒度（太细步数多、太粗不灵活）、schema 描述怎么写、参数校验。</li>
+<li><em>任务成功率多少？怎么测的？</em> —— 评测集 + 自动判定 + 人工复核；准备好成功率的口径。</li>
+<li><em>失败的主要模式有哪些？</em> —— 准备 2–3 类：工具参数幻觉、循环调用、过早放弃；对应缓解。</li>
+<li><em>怎么防止死循环？</em> —— 最大步数、重复动作检测、预算（token/时间）熔断。</li>
+<li><em>上下文太长怎么办？</em> —— 工具结果截断/摘要、历史压缩、状态外置（文件/DB）。</li>
+<li><em>错误恢复怎么做的？</em> —— 工具报错回填让模型自纠、重试退避、检查点回滚、人工接管。</li>
+<li><em>为什么用（/不用）多 Agent？</em> —— 按 8.2 真题 5 的观点答，结合你的任务可分解性。</li>
+<li><em>记忆方案是什么？</em> —— 短期窗口管理 + 长期向量库存什么（用户偏好？历史轨迹？），存取时机。</li>
+<li><em>安全性怎么考虑？</em> —— 工具权限分级、高危操作人审、代码沙箱、注入防护（检索内容/工具结果里的恶意指令）。</li>
+</ol>
+<h2 id="d0-48">11.6 推理优化项目追问题库（10 问）</h2>
+<ol>
+<li><em>基线指标：QPS/TTFT/TPOT/吞吐是多少？</em> —— 先有 before 才有 after。</li>
+<li><em>显存怎么算的？为什么这么部署？</em> —— 权重 + KV cache 公式现场算，体现基本功。</li>
+<li><em>为什么选 vLLM（或 TRT-LLM）？对比过吗？</em> —— PagedAttention/continuous batching 的收益 + 生态；压测数据支撑。</li>
+<li><em>量化用了什么方案？掉点多少、怎么测的？</em> —— 方案选型理由（W4A16 vs W8）+ 评测集回归 + 敏感任务人工抽检。</li>
+<li><em>batch 怎么调的？吞吐和延迟怎么权衡？</em> —— batch 大吞吐高 TTFT 毛刺 → SLO 分级。</li>
+<li><em>prefix cache 命中率多少？收益多少？</em> —— system prompt/多轮复用场景。</li>
+<li><em>投机解码试过吗？为什么（不）用？</em> —— 接受率实测；batch 大时收益趋零。</li>
+<li><em>长上下文请求怎么处理？</em> —— chunked prefill、KV 量化、限流。</li>
+<li><em>压测怎么做的？</em> —— 流量回放/合成负载、分位数（P99 不看平均）、找拐点。</li>
+<li><em>成本降了多少？按什么计价？</em> —— 每 1M token 成本 before/after。</li>
+</ol>
+<h2 id="d0-49">11.7 通用项目问题（每类项目都会被问）</h2>
+<ul>
+<li><em>这个项目里你最大的贡献是什么？</em> —— 用"决策"定义贡献，不用工时。</li>
+<li><em>遇到最难的技术问题是什么，怎么解决的？</em> —— 结构：现象 → 排查路径（排除了什么）→ 根因 → 修复 → 预防。</li>
+<li><em>如果重做一遍，你会改什么？</em> —— 展示反思力，别答"没什么要改的"。</li>
+<li><em>团队的分工？你们几个人？</em> —— 诚实；说清自己边界，不贪功。</li>
+<li><em>这个项目的业务价值怎么衡量？</em> —— 对齐到北极星指标（耗时、人力、转化率）。</li>
+</ul>
+<h2 id="d0-50">11.8 没有大模型项目经历怎么办？</h2>
+<ol>
+<li><strong>两周造一个能讲的项目</strong>：①用开源框架实现 mini-RAG（自己写 embedding 检索 + rerank，构造 100 条领域评测集，跑出 before/after 数字）；②LoRA 微调一个 7B 小模型做垂直任务（数据自建 + 评测对比）；③写一个带工具调用的 mini-Agent（3 个工具 + 失败恢复）。有真数字、有踩坑记录就足够二面聊 30 分钟。</li>
+<li><strong>能深挖的细节自己补</strong>：每个技术选型都写下"备选方案 + 不选的理由"。</li>
+<li>参考开源项目：wdndev/llm_interview_note 作者配套的 tiny-rag、Tiny-Universe 系列就是为面试准备的可动手项目。</li>
+</ol>
+<hr />
+<h1 id="d0-51">第 12 章 手撕代码题库（10 题）</h1>
+<blockquote>
+<p>手撕高频清单（牛客面经统计）：<strong>Multi-Head Attention（含 KV Cache 版）&gt; RoPE &gt; LayerNorm/RMSNorm &gt; 位置编码 &gt; SwiGLU/FFN &gt; 采样（top-k/top-p）&gt; LoRA &gt; BPE &gt; 投机解码（伪代码）</strong>。以下每题给思路 + 代码。</p>
+</blockquote>
+<h2 id="d0-52">12.1 标准 Multi-Head Attention（带 mask）</h2>
+<p>见配套速查手册或如下核心（面试白板版）：</p>
+<pre><code class="language-python">import torch, torch.nn as nn, math
+
+class MHA(nn.Module):
+    def __init__(self, d_model, n_heads):
+        super().__init__()
+        self.h, self.dh = n_heads, d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.out = nn.Linear(d_model, d_model, bias=False)
+
+    def forward(self, x, mask=None):          # x: (B, T, D)
+        B, T, D = x.shape
+        q, k, v = self.qkv(x).chunk(3, dim=-1)
+        q = q.view(B, T, self.h, self.dh).transpose(1, 2)   # (B,h,T,dh)
+        k = k.view(B, T, self.h, self.dh).transpose(1, 2)
+        v = v.view(B, T, self.h, self.dh).transpose(1, 2)
+        att = q @ k.transpose(-2, -1) / math.sqrt(self.dh)  # (B,h,T,T)
+        if mask is not None:
+            att = att.masked_fill(~mask, float(&quot;-inf&quot;))
+        y = (att.softmax(-1) @ v).transpose(1, 2).contiguous().view(B, T, D)
+        return self.out(y)
+
+# causal mask
+mask = torch.tril(torch.ones(T, T, dtype=torch.bool))
+</code></pre>
+<p><strong>讲解</strong>：三个易错点——除 √dh 不是 √d_model；<code>transpose(1,2)</code> 后 reshape 前要 <code>contiguous</code>；mask 语义是"允许的位置为 True"所以取反填充。工程版直接 <code>F.scaled_dot_product_attention(q, k, v, is_causal=True)</code>。</p>
+<h2 id="d0-53">12.2 带 KV Cache 的解码式 Attention（高频，2025 面经新增）</h2>
+<pre><code class="language-python">class DecoderAttention(nn.Module):
+    &quot;&quot;&quot;prefill 传整段, decode 传 1 个 token, cache 存历史 K/V&quot;&quot;&quot;
+    def __init__(self, d_model, n_heads):
+        super().__init__()
+        self.h, self.dh = n_heads, d_model // n_heads
+        self.wq = nn.Linear(d_model, d_model, bias=False)
+        self.wk = nn.Linear(d_model, d_model, bias=False)
+        self.wv = nn.Linear(d_model, d_model, bias=False)
+        self.wo = nn.Linear(d_model, d_model, bias=False)
+
+    def forward(self, x, cache=None):         # x: (B, T_new, D)
+        B, T, D = x.shape
+        q = self.wq(x).view(B, T, self.h, self.dh).transpose(1, 2)
+        k = self.wk(x).view(B, T, self.h, self.dh).transpose(1, 2)
+        v = self.wv(x).view(B, T, self.h, self.dh).transpose(1, 2)
+        if cache is not None:                 # 拼接历史 K/V
+            k = torch.cat([cache[0], k], dim=2)
+            v = torch.cat([cache[1], v], dim=2)
+        new_cache = (k, v)
+        att = q @ k.transpose(-2, -1) / math.sqrt(self.dh)
+        if T &gt; 1:                             # prefill 需 causal mask（考虑已有历史）
+            T_hist = k.shape[2] - T
+            row = torch.arange(T, device=x.device).unsqueeze(1) + T_hist
+            col = torch.arange(k.shape[2], device=x.device).unsqueeze(0)
+            att = att.masked_fill(col &gt; row, float(&quot;-inf&quot;))
+        # T == 1 时新 token 天然可见全部历史，无需 mask
+        y = (att.softmax(-1) @ v).transpose(1, 2).reshape(B, T, D)
+        return self.wo(y), new_cache
+</code></pre>
+<p><strong>讲解</strong>：面试官想听的三点——①只缓存 K/V，不缓存 Q；②decode 一步只需算新 token 的 q 与全历史的注意力，复杂度从 O(T²d) 降到 O(Td)；③GQA 版只需让 wk/wv 输出更少的头、q 广播匹配。追问显存就答 0.5 MB/token 公式。</p>
+<h2 id="d0-54">12.3 RoPE</h2>
+<pre><code class="language-python">def apply_rope(q, k, theta=10000.0):
+    # q, k: (B, h, T, dh)，dh 为偶数
+    B, H, T, dh = q.shape
+    half = dh // 2
+    inv_freq = 1.0 / (theta ** (torch.arange(0, half, device=q.device).float() / half))
+    pos = torch.arange(T, device=q.device).float()
+    ang = torch.outer(pos, inv_freq)              # (T, half)
+    cos, sin = ang.cos()[None, None], ang.sin()[None, None]   # 广播到 (1,1,T,half)
+
+    def rotate(x):
+        x1, x2 = x[..., :half], x[..., half:]
+        return torch.cat([x1 * cos - x2 * sin, x1 * sin + x2 * cos], dim=-1)
+
+    return rotate(q), rotate(k)
+</code></pre>
+<p><strong>讲解</strong>：关键写对两点——频率 <code>theta^(-2i/d)</code> 按维度对衰减；旋转是"两两一组"的平面旋转。面试口头补：内积只依赖相对位置，因此旧 cache 的 K 不需要重算。</p>
+<h2 id="d0-55">12.4 RMSNorm / LayerNorm</h2>
+<pre><code class="language-python">class RMSNorm(nn.Module):
+    def __init__(self, d, eps=1e-6):
+        super().__init__()
+        self.g = nn.Parameter(torch.ones(d))
+        self.eps = eps
+    def forward(self, x):
+        rms = x.pow(2).mean(-1, keepdim=True).add(self.eps).rsqrt()
+        return x * rms * self.g
+</code></pre>
+<p><strong>讲解</strong>：与 LayerNorm 的唯一区别是不减均值、不算 bias，归一化分母是均方根。一句加分："省一次 mean 和一次 bias，在大模型里 FLOPs 占比可观"。</p>
+<h2 id="d0-56">12.5 SwiGLU FFN</h2>
+<pre><code class="language-python">class SwiGLU(nn.Module):
+    def __init__(self, d, hidden):
+        super().__init__()
+        self.w1 = nn.Linear(d, hidden, bias=False)   # gate
+        self.w3 = nn.Linear(d, hidden, bias=False)   # up
+        self.w2 = nn.Linear(hidden, d, bias=False)   # down
+    def forward(self, x):
+        return self.w2(torch.nn.functional.silu(self.w1(x)) * self.w3(x))
+</code></pre>
+<h2 id="d0-57">12.6 Top-P（nucleus）采样</h2>
+<pre><code class="language-python">@torch.no_grad()
+def sample_top_p(logits, top_p=0.9, temperature=1.0):
+    probs = (logits / temperature).softmax(-1)
+    sorted_p, idx = probs.sort(descending=True)
+    cum = sorted_p.cumsum(-1)
+    keep = (cum - sorted_p) &lt; top_p        # 保留累计概率不足 top_p 的最小前缀
+    sorted_p = sorted_p * keep
+    sorted_p = sorted_p / sorted_p.sum()
+    return idx[sorted_p.multinomial(1)]
+</code></pre>
+<p><strong>讲解</strong>：<code>cum - sorted_p &lt; top_p</code> 即"当前 token 之前的累计概率 &lt; top_p"，等价于教科书上"cumsum &gt; top_p 后右移保留第一个超界 token"的写法。追问 top-k：<code>torch.topk(logits, k)</code> 后同套路。</p>
+<h2 id="d0-58">12.7 LoRA 层</h2>
+<pre><code class="language-python">class LoRALinear(nn.Module):
+    def __init__(self, linear: nn.Linear, r=8, alpha=16, dropout=0.0):
+        super().__init__()
+        self.base = linear                          # 冻结原层
+        for p in self.base.parameters():
+            p.requires_grad = False
+        self.A = nn.Parameter(torch.randn(r, linear.in_features) * 0.01)  # 高斯
+        self.B = nn.Parameter(torch.zeros(linear.out_features, r))        # 零
+        self.scale = alpha / r
+        self.drop = nn.Dropout(dropout)
+
+    def forward(self, x):
+        return self.base(x) + self.scale * ((self.drop(x) @ self.A.T) @ self.B.T)
+</code></pre>
+<p><strong>讲解</strong>：B 零初始化保证训练起点与原模型完全等价；推理时可把 <code>B@A</code> merge 进 base 消除开销。</p>
+<h2 id="d0-59">12.8 简化 BPE 训练</h2>
+<pre><code class="language-python">from collections import Counter
+
+def train_bpe(text, num_merges):
+    word_freqs = Counter(text.split())
+    seqs = [(tuple(w) + (&quot;&lt;/w&gt;&quot;,), f) for w, f in word_freqs.items()]
+    merges = []
+    for _ in range(num_merges):
+        pairs = Counter()
+        for toks, f in seqs:
+            for a, b in zip(toks, toks[1:]):
+                pairs[(a, b)] += f
+        if not pairs: break
+        best = max(pairs, key=pairs.get)
+        merges.append(best)
+        seqs = [(merge_pair(toks, best), f) for toks, f in seqs]
+    return merges
+
+def merge_pair(toks, pair):
+    out, i = [], 0
+    while i &lt; len(toks):
+        if i &lt; len(toks) - 1 and (toks[i], toks[i+1]) == pair:
+            out.append(toks[i] + toks[i+1]); i += 2
+        else:
+            out.append(toks[i]); i += 1
+    return tuple(out)
+</code></pre>
+<p><strong>讲解</strong>：说清"按词聚合频次、每轮全局找最高频 pair 合并"即可；被追问就说真实实现是 byte-level + 优先队列效率优化。</p>
+<h2 id="d0-60">12.9 投机解码（伪代码级）</h2>
+<pre><code class="language-python">def speculative_decode(target, draft, seq, k=4, max_len=100):
+    while len(seq) &lt; max_len:
+        drafts = draft.generate(seq, k)               # 1) 草稿快速起 k 个
+        logits = target.logits_for(seq + drafts)      # 2) 大模型一次前向并行验证
+        for i, d in enumerate(drafts):                # 3) 逐个拒绝采样
+            p, q = softmax(logits[i]), draft.dist(seq[:len(seq)+i], d)
+            if random() &lt; min(1, p[d] / q[d]):
+                seq.append(d)                         # 接受
+            else:
+                seq.append(sample(normalize(max(p - q, 0))))  # 残差重采样，保分布
+                break
+    return seq
+</code></pre>
+<p><strong>讲解</strong>：必须说出的关键词——"拒绝采样 + 残差分布，保证输出分布严格等于目标模型（无损）"；以及"decode 是带宽瓶颈，一次前向验证 k 个 token 才有收益"。</p>
+<h2 id="d0-61">12.10 手撕清单 checklist（考前过一遍）</h2>
+<ul>
+<li>[ ] MHA（含 mask）——12.1</li>
+<li>[ ] 带 KV Cache 的解码 attention——12.2</li>
+<li>[ ] RoPE——12.3</li>
+<li>[ ] RMSNorm / LayerNorm——12.4</li>
+<li>[ ] SwiGLU——12.5</li>
+<li>[ ] top-k / top-p 采样——12.6</li>
+<li>[ ] LoRA 层——12.7</li>
+<li>[ ] 简化 BPE——12.8</li>
+<li>[ ] 投机解码伪代码——12.9</li>
+<li>[ ] 绝对正弦位置编码（sin/cos 版，能默写）</li>
+<li>[ ] Beam search（口述流程即可：维护 k 个候选按累计 log-prob，长度惩罚）</li>
+<li>[ ] 手算题：KV cache 显存、训练显存 16B/参、6ND 训练时长</li>
+</ul>
+<hr />
+<h1 id="d0-62">第 13 章 开放题与反问</h1>
+<h2 id="d0-63">13.1 开放题回答框架</h2>
+<p>开放题（AGI 多远、开源 vs 闭源、Transformer 会不会被替代）考的是<strong>观点 + 论据 + 边界感</strong>，模板：明确立场 → 两个论据（一个事实一个推理）→ 承认反方 → 落回自己关注什么。</p>
+<p>高频题准备：
+- <strong>Transformer 会被 Mamba 等替代吗</strong>——立场：中长期共存混合架构（Jamba 类）。论据：线性注意力的优势在超长序列与恒定显存，但 T² 注意力的精确回忆能力强、生态成熟。
+- <strong>合成数据的作用</strong>——已被验证（phi、R1 蒸馏数据），瓶颈是多样性与模型塌缩风险，人类数据仍是"锚"。
+- <strong>当前 Agent 最大瓶颈</strong>——可靠性（误差累积）+ 评测缺失 + 长任务上下文管理，而非模型智力。
+- <strong>平常怎么用 AI</strong>（HR/主管都爱问）——准备 2 个真实工作流（如"用 LLM 做代码 review + 让 agent 跑数据实验"），展示你是重度实践者而非围观者。
+- <strong>最近读的论文</strong>——用四段式：针对什么问题 → 核心方法一句话 → 关键结果 → 对你工作/项目的启发。选你真读过的，追问两轮还能答的。</p>
+<h2 id="d0-64">13.2 反问问题（体现水平的 5 个）</h2>
+<ol>
+<li>团队的模型是自研基座还是基于开源微调？算力预算量级？</li>
+<li>当前阶段最大的技术瓶颈是什么（效果、成本还是工程）？</li>
+<li>这个岗位入职后前三个月的期望产出是什么？</li>
+<li>团队的评测体系是怎么搭的？</li>
+<li>项目和业务的关系——算法同学有多少时间在处理数据 vs 建模？</li>
+</ol>
+<hr />
+<h1 id="d0-65">第 14 章 复习计划与真题来源</h1>
+<h2 id="d0-66">14.1 两周复习计划</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>时间</th>
+<th>内容</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day 1–3</td>
+<td>第 1–3 章 + 手撕 12.1–12.4</td>
+<td>attention/RoPE 默写通过</td>
+</tr>
+<tr>
+<td>Day 4–6</td>
+<td>第 4–5 章 + 手撕 12.5–12.8</td>
+<td>LoRA/RLHF/DPO 能白板推导</td>
+</tr>
+<tr>
+<td>Day 7–8</td>
+<td>第 6 章 + 显存/成本计算题</td>
+<td>计算题 3 分钟内口算</td>
+</tr>
+<tr>
+<td>Day 9–10</td>
+<td>第 7–8 章</td>
+<td>RAG 十连问脱稿回答</td>
+</tr>
+<tr>
+<td>Day 11–12</td>
+<td>第 11 章：把项目按四层追问自查</td>
+<td>每类项目 15 问自测通过</td>
+</tr>
+<tr>
+<td>Day 13</td>
+<td>第 9–10、13 章 + 速查手册 50 题</td>
+<td>全清单过一遍</td>
+</tr>
+<tr>
+<td>Day 14</td>
+<td>全真模拟（找人提问或对镜子计时）</td>
+<td>查漏</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="d0-67">14.2 真题与资料来源（本文真题出处）</h2>
+<ul>
+<li><a href="https://github.com/datawhalechina/hello-agents/blob/main/Extra-Chapter/Extra01-%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93.md">Datawhale hello-agents · LLM &amp; VLM &amp; Agent 面试问题总结（88 题）</a> —— 第 1/5/7/8/9/10 章真题主来源</li>
+<li><a href="https://www.cnblogs.com/12lisu/p/19921242">RAG 夺命 10 连问（博客园）</a> —— 第 7 章、11.3 节来源</li>
+<li><a href="https://github.com/wdndev/llm_interview_note">wdndev/llm_interview_note（GitHub，系统面试笔记）</a> —— 配套精读，含 tiny-rag 动手项目</li>
+<li><a href="https://01.me/2025/04/llm-interview-questions">《图解大模型》配套 · 大模型面试题 200 问</a> —— 高阶补充（对齐、隐私、提示注入）</li>
+<li><a href="https://www.cnblogs.com/xiaolincoding/p/20534325">小林 coding · Agent/RAG/LLM 面试题解析</a> —— 生产环境性能与稳定性加试题</li>
+<li><a href="https://zhuanlan.zhihu.com/p/2058150232085607301">知乎 · 2026 大模型面试题准备（851 题按面试链路）</a> —— 应用岗考点密度参考</li>
+<li><a href="https://www.nowcoder.com/feed/main/detail/5a43a5d03e5746e5b743bb488a5c00f9">牛客 · 大模型算法面试手撕代码总结</a> —— 第 12 章手撕清单来源</li>
+<li><a href="https://zhuanlan.zhihu.com/p/1914362873347544443">知乎 · 手写 Multi-Head Attention 还得带 KV Cache</a> —— 12.2 题来源</li>
+<li><a href="https://www.cnblogs.com/moonout/p/19702578">博客园 · LLM 算法岗面试常问八股（LoRA 细节）</a> —— 第 4 章追问来源</li>
+<li><a href="https://github.com/adongwanai/AgentGuide">AgentGuide · AI Agent 面试题库（含公司面经案例）</a> —— Agent 手撕与公司题参考</li>
+<li><a href="https://developer.volcengine.com/articles/7385004389205573669">火山引擎 · 大模型算法工程师面试题与参考答案</a>、<a href="https://cloud.tencent.com/developer/article/2397553">腾讯云 · 大模型面试百问百答</a> —— 补充题源</li>
+</ul>
+<blockquote>
+<p>提示：Agent 与推理模型（RLVR/R1 系）方向演进最快，面试前一周建议扫一遍 DeepSeek/Qwen 最新技术报告的"创新点"部分和目标公司的技术博客，替换第 13 章开放题的素材。</p>
+</blockquote></article>
+<article id="doc1"><h1 id="d1-1">大模型 (LLM) 面试资料整理</h1>
+<blockquote>
+<p>适用岗位：大模型算法工程师 / LLM 应用工程师（RAG、Agent、平台）/ AI 后端
+使用建议：第 1–5 章是算法岗必考的硬核部分；第 6–7 章是应用岗重点；第 11 章是面试前一晚的速查清单。回答问题时先给结论、再展开原理、最后补一个例子或数字，会显得更有层次。</p>
+</blockquote>
+<hr />
+<h2 id="d1-2">0. 考点地图</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>出现频率</th>
+<th>重点内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transformer 基础</td>
+<td>★★★★★</td>
+<td>Attention 手推、位置编码、KV Cache、Decoder-only</td>
+</tr>
+<tr>
+<td>微调与对齐</td>
+<td>★★★★★</td>
+<td>LoRA/QLoRA、RLHF、DPO、GRPO</td>
+</tr>
+<tr>
+<td>推理与部署</td>
+<td>★★★★★</td>
+<td>KV Cache 计算、量化、投机解码、vLLM</td>
+</tr>
+<tr>
+<td>预训练</td>
+<td>★★★★</td>
+<td>Scaling Law、分布式训练、显存估算</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>★★★★</td>
+<td>完整链路、检索优化、与微调的取舍</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>★★★</td>
+<td>ReAct、Function Calling、MCP、多 Agent</td>
+</tr>
+<tr>
+<td>评测/幻觉</td>
+<td>★★★</td>
+<td>幻觉成因、榜单、LLM-as-judge 偏差</td>
+</tr>
+<tr>
+<td>多模态</td>
+<td>★★</td>
+<td>CLIP、LLaVA/BLIP-2 架构</td>
+</tr>
+<tr>
+<td>手撕代码</td>
+<td>★★★★</td>
+<td>Multi-Head Attention、显存/成本估算题</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="d1-3">1. Transformer 与模型结构</h2>
+<h3>1.1 Self-Attention</h3>
+<pre><code>Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V
+</code></pre>
+<ul>
+<li>Q、K、V 由输入 x 分别乘三个投影矩阵得到；输出再过一个线性层。</li>
+<li><strong>为什么除以 √d_k</strong>：d_k 越大，q·k 点积的方差越大（方差 ∝ d_k），softmax 会进入饱和区（接近 one-hot），梯度趋近于 0。除以 √d_k 把方差拉回约 1，保持梯度健康。</li>
+<li>复杂度：序列长度 T 时，注意力矩阵是 T×T，计算和显存都是 <strong>O(T²·d)</strong>，这是长文本的主要瓶颈。</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>RNN</th>
+<th>CNN</th>
+<th>Self-Attention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每层计算量</td>
+<td>O(T·d²)</td>
+<td>O(k·T·d²)</td>
+<td>O(T²·d)</td>
+</tr>
+<tr>
+<td>顺序依赖（可并行性）</td>
+<td>串行</td>
+<td>并行</td>
+<td>并行</td>
+</tr>
+<tr>
+<td>任意两位置路径长度</td>
+<td>O(T)</td>
+<td>O(log T)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table></div>
+<p>加分项：能说出注意力矩阵"饱和→梯度消失"的推导，而不是背"防止点积过大"。</p>
+<h3>1.2 Multi-Head Attention</h3>
+<ul>
+<li>把 d_model 拆成 h 个头，每头维度 d_h = d_model/h，各头独立做 attention 后拼接。</li>
+<li>意义：<strong>不同的头可以在不同的表示子空间关注不同位置的模式</strong>（句法、共指、位置等），单头相当于平均掉了这些信息。多头总的计算量与单头全维度基本相同。</li>
+<li>追问"头数怎么选"：经验上 d_h = 64 或 128 常见；头太少表达能力不够，太多则每头维度太小。</li>
+</ul>
+<h3>1.3 位置编码</h3>
+<p>演进路线：<strong>绝对位置 → 相对位置（RoPE / ALiBi）</strong>。</p>
+<ul>
+<li><strong>正弦位置编码</strong>（原始 Transformer）：不同频率的 sin/cos，可以用线性变换近似表达相对位置；无需训练。</li>
+<li><strong>可学习绝对位置</strong>（BERT/GPT-2）：外推能力差，超过训练长度就失效。</li>
+<li><strong>RoPE（旋转位置编码，主流）</strong>：把 q、k 的维度两两一组，按位置 m 旋转角度 m·θ_i（θ_i = 10000^(-2i/d)）。关键性质：两个旋转后向量的内积<strong>只依赖相对位置 m−n</strong>。实现上是"绝对"的，效果是"相对"的。</li>
+<li><strong>ALiBi</strong>：不改 Q/K，直接在注意力分数上加 −m·|i−j| 的线性偏置（远处惩罚），外推较好。</li>
+<li><strong>长上下文扩展</strong>（高频追问）：</li>
+<li>PI（Position Interpolation，线性内插）：把位置除以缩放因子压进训练长度，需要少量微调。</li>
+<li>NTK-aware：改 RoPE 的 base（如 10000→更大），高频保内插、低频保外推，几乎不用微调。</li>
+<li>YaRN：按频率分段做不同策略 + 注意力温度修正，效果最好之一。</li>
+</ul>
+<h3>1.4 LayerNorm 与残差</h3>
+<ul>
+<li><strong>Post-LN</strong>（原始 Transformer）：LN 在残差相加之后。深层训练不稳定，必须 warmup，梯度容易出问题。</li>
+<li><strong>Pre-LN</strong>（GPT-2 以后主流）：LN 在子层之前。梯度可以经残差主通路直通顶层，训练稳定，是目前大模型的标配。</li>
+<li><strong>RMSNorm</strong>（LLaMA 等）：去掉均值中心化，只做 <code>x / √(mean(x²) + ε) * g</code>，比 LayerNorm 省计算，效果基本不降。</li>
+</ul>
+<h3>1.5 FFN 与激活函数</h3>
+<ul>
+<li>标准 FFN：两个线性层，隐层 4d，GELU/ReLU。</li>
+<li><strong>SwiGLU</strong>（LLaMA/Qwen 等）：<code>FFN(x) = W2( Swish(W1·x) ⊙ W3·x )</code>，门控机制让信息选择性通过。为保持参数量不变，隐层约取 8/3·d（如 d=4096 → 11008）。</li>
+</ul>
+<h3>1.6 为什么主流大模型都用 Decoder-only？（必考）</h3>
+<ol>
+<li><strong>训练信号效率高</strong>：CLM 目标下每个 token 都产生 loss；MLM/Encoder-Decoder 只对被 mask 的 span 计算损失。</li>
+<li><strong>Scaling 表现好</strong>：GPT-3 证明了 decoder-only 在海量数据下 zero-shot/few-shot 能力随规模涌现。</li>
+<li><strong>推理友好</strong>：单流生成 + KV Cache 天然高效，架构简单好 scale。</li>
+<li>统一了任务形式：所有任务都转成"续写"。</li>
+</ol>
+<p>加分项：主动补充"Encoder-Decoder 在数据充足的翻译/条件生成类任务仍有优势；BERT 类模型在 embedding/检索场景依然常用"，体现你不是一边倒。</p>
+<h3>1.7 KV Cache 与注意力变体（必考）</h3>
+<ul>
+<li><strong>原理</strong>：自回归生成第 t 个 token 时，前面 token 的 K、V 不变，缓存下来避免重复计算；每步只需算新 token 的 q。Q 不需要缓存（它只和当前 token 有关）。</li>
+<li><strong>大小公式</strong>（必会）：</li>
+</ul>
+<pre><code>KV Cache = 2 (K和V) × n_layers × n_kv_heads × d_head × seq_len × batch × dtype_bytes
+</code></pre>
+<p>例：LLaMA-2-7B（32 层、hidden 4096、fp16）每 token ≈ 2×32×4096×2 B = <strong>512 KB/token</strong>，4096 上下文 ≈ <strong>2 GB/条请求</strong>。
+- <strong>变体对比</strong>：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>变体</th>
+<th>KV Head 数</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MHA</td>
+<td>= Q 头数</td>
+<td>质量最好，KV cache 最大</td>
+</tr>
+<tr>
+<td>MQA</td>
+<td>1</td>
+<td>所有 Q 头共享 1 组 KV，cache 缩到 1/h，质量有损</td>
+</tr>
+<tr>
+<td>GQA</td>
+<td>分组共享（如 8）</td>
+<td>MHA 与 MQA 的折中，主流选择（LLaMA-3、Qwen2）</td>
+</tr>
+<tr>
+<td>MLA</td>
+<td>低秩压缩</td>
+<td>DeepSeek-V2/V3：把 KV 压缩到低秩隐向量（如 512 维）只缓存隐向量 + 解耦 RoPE key，cache 减少约 90%，质量接近 MHA</td>
+</tr>
+</tbody>
+</table></div>
+<h3>1.8 手撕 Multi-Head Attention（PyTorch 高频手写题）</h3>
+<pre><code class="language-python">import torch, torch.nn as nn, math
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model, n_heads, dropout=0.0):
+        super().__init__()
+        assert d_model % n_heads == 0
+        self.h, self.dh = n_heads, d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.out = nn.Linear(d_model, d_model, bias=False)
+        self.drop = nn.Dropout(dropout)
+
+    def forward(self, x, mask=None):
+        B, T, D = x.shape
+        q, k, v = self.qkv(x).chunk(3, dim=-1)          # (B,T,D) × 3
+        # 拆头: (B,T,D) -&gt; (B,h,T,dh)
+        q = q.view(B, T, self.h, self.dh).transpose(1, 2)
+        k = k.view(B, T, self.h, self.dh).transpose(1, 2)
+        v = v.view(B, T, self.h, self.dh).transpose(1, 2)
+        att = q @ k.transpose(-2, -1) / math.sqrt(self.dh)   # (B,h,T,T)
+        if mask is not None:
+            att = att.masked_fill(mask == 0, float(&quot;-inf&quot;))
+        att = self.drop(att.softmax(dim=-1))
+        y = (att @ v).transpose(1, 2).contiguous().view(B, T, D)
+        return self.out(y)
+
+# causal mask（下三角）
+T = 8
+mask = torch.tril(torch.ones(T, T, dtype=torch.bool))
+</code></pre>
+<p>加分项：说明实际工程里直接用 <code>F.scaled_dot_product_attention</code>（自动走 FlashAttention/Flash-Decoding 内核），并知道 <code>view + transpose</code> 后要 <code>contiguous</code> 才能安全 reshape。</p>
+<hr />
+<h2 id="d1-4">2. Tokenizer 与词表</h2>
+<ul>
+<li><strong>BPE</strong>（GPT 系）：从字符级开始，迭代合并语料中最高频的相邻 pair，直到达到词表大小。<strong>Byte-level BPE</strong>（GPT-2 起）以 256 个字节为基础词表，任何文本都能编码，彻底消除 OOV。</li>
+<li><strong>WordPiece</strong>（BERT）：合并标准是"使似然提升最大"的 pair，子词加 <code>##</code> 前缀。</li>
+<li><strong>Unigram LM</strong>（SentencePiece 可选）：先建大词表，按概率模型逐步剪枝；每个词有概率，支持子词采样。</li>
+<li><strong>SentencePiece</strong>：把空格也当作普通字符（<code>▁</code>），语言无关、可逆切分，中文/日文友好。</li>
+<li><strong>词表大小的权衡</strong>：大词表 → 文本压缩率高（同样内容 token 更少，prefill 更快、KV cache 更小）、多语言覆盖好；但 embedding + lm_head 参数变大、低频 token 训练不充分。主流从 32k（LLaMA-1）涨到 128k–152k（LLaMA-3 / Qwen）。</li>
+<li><strong>中文问题</strong>：英文为主词表下一个汉字常被切成 2–3 个 byte token，效率低、语义差；解决方案是扩充中文词表 + 继续训练（Qwen、Baichuan 的做法）。</li>
+<li>特殊 token：<code>&lt;bos&gt;/&lt;eos&gt;/&lt;pad&gt;</code>、对话模板 token（<code>&lt;|im_start|&gt;</code> 等）——训练和推理必须用一致的 chat template，模板用错是线上效果差的常见原因。</li>
+</ul>
+<hr />
+<h2 id="d1-5">3. 预训练</h2>
+<h3>3.1 训练目标</h3>
+<ul>
+<li>CLM（causal LM，主流）：最大化 <code>Σ log P(x_t | x_&lt;t)</code>。</li>
+<li>MLM（BERT）：随机 mask 15%（80% 替换 / 10% 随机 / 10% 保留）；对理解任务好，但每个样本只有 15% 的损失信号。</li>
+<li>Span corruption（T5）、UL2（多尺度去噪混合）——知道名字和思路即可。</li>
+</ul>
+<h3>3.2 数据工程（面试常问"预训练数据怎么处理"）</h3>
+<p>流程：获取（CommonCrawl 等）→ 清洗 → 去重 → 质量过滤 → 配比混合 → 去污染。</p>
+<ul>
+<li>规则清洗：语言识别、长度过滤、乱码/重复行比例（Gopher rules）。</li>
+<li>质量分类器：fasttext 或打分模型区分"百科/书籍 vs 随机网页"。</li>
+<li><strong>去重</strong>：精确去重（hash）+ 近似去重（MinHash-LSH）；去重能明显提升效果并降低记忆/污染。</li>
+<li>配比：高质量源（百科、书籍、代码）上采样；代码数据对推理能力有正迁移。</li>
+<li><strong>去污染（decontamination）</strong>：删除与评测集（MMLU 等）n-gram 重叠的样本，否则刷榜虚高。</li>
+</ul>
+<h3>3.3 Scaling Laws（必考）</h3>
+<ul>
+<li><strong>Kaplan 2020</strong>：loss 随参数量/数据/算力呈幂律下降；同等算力下优先加大模型。</li>
+<li><strong>Chinchilla 2022</strong>：给定算力，最优配置是 <strong>token 数 ≈ 20 × 参数量</strong>（70B 模型配 1.4T token 打败 280B 的 Gopher）。</li>
+<li>工程实际：为了<strong>推理成本</strong>，常"过度训练"小模型（LLaMA-3 8B 用了 15T token，远超 20×8B=160B），因为一次训练、无数次推理。</li>
+</ul>
+<h3>3.4 混合精度训练</h3>
+<ul>
+<li>fp16：动态范围小（±65504），需要 <strong>loss scaling</strong> 防止梯度下溢。</li>
+<li>bf16：指数位与 fp32 相同，不需要 loss scaling，精度略低，Ampere 之后默认。</li>
+<li>权重另存 <strong>fp32 master copy</strong>，优化器状态也是 fp32——纯 fp16 累加更新误差会很大。</li>
+</ul>
+<h3>3.5 分布式训练（必考，能画图最好）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>并行方式</th>
+<th>切什么</th>
+<th>通信</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DP / ZeRO-1/2/3</td>
+<td>数据</td>
+<td>少</td>
+<td>ZeRO-1 切优化器状态，2 加切梯度，3 加切参数（≈ PyTorch FSDP）</td>
+</tr>
+<tr>
+<td>TP 张量并行</td>
+<td>层内权重矩阵</td>
+<td><strong>每层 2 次 all-reduce，通信重</strong></td>
+<td>节点内 NVLink</td>
+</tr>
+<tr>
+<td>PP 流水线并行</td>
+<td>按层切成 stage</td>
+<td>只在 stage 边界传激活，量小</td>
+<td>跨节点；用 micro-batch 减 bubble</td>
+</tr>
+<tr>
+<td>EP 专家并行</td>
+<td>MoE 的 expert</td>
+<td>all-to-all</td>
+<td>MoE 模型</td>
+</tr>
+<tr>
+<td>SP/CP 序列并行</td>
+<td>序列维度</td>
+<td>ring attention</td>
+<td>超长上下文</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>流水线 bubble = (p−1)/(m+p−1)，p 是 stage 数、m 是 micro-batch 数；1F1B 调度还降低激活显存。</li>
+<li>典型组合是 <strong>3D 并行</strong>（TP × PP × DP），按集群拓扑（节点内带宽高、节点间带宽低）分配。</li>
+</ul>
+<h3>3.6 MoE（大厂常问）</h3>
+<ul>
+<li>把 FFN 换成 N 个 expert，router 给每个 token 选 top-k 个（k=1 或 2）。</li>
+<li>需要<strong>负载均衡损失</strong>（Switch Transformer 的 aux loss，或 DeepSeek 的无梯度 bias 调节），否则 router 塌缩到少数 expert。</li>
+<li>总参数大、激活参数小（DeepSeek-V3：671B 总 / 37B 激活），同算力下质量更高；代价是显存、路由不稳、EP 工程复杂。</li>
+</ul>
+<h3>3.7 显存估算例题（必考）</h3>
+<p><strong>训练 7B 模型（bf16 + AdamW 混合精度）需要多少显存？</strong></p>
+<ul>
+<li>权重 bf16：2 B/参数 → 14 GB</li>
+<li>梯度 bf16：2 → 14 GB</li>
+<li>fp32 master + Adam m + v：12 B/参数 → 84 GB</li>
+<li>合计 ≈ <strong>112 GB + 激活</strong>（激活与 batch、seq、是否开 gradient checkpointing 有关）</li>
+<li>结论：单卡 80G 放不下，需要 ZeRO-3 / 多卡；若用 LoRA，可训练参数只有 ~0.5%，单卡 48G 甚至 24G 可行。</li>
+</ul>
+<p><strong>训练时长估算（万能公式）</strong>：<code>FLOPs ≈ 6 × N × D</code>（N 参数量、D token 数）。
+例：7B 模型训 1T token → 6×7e9×1e12 = 4.2e22 FLOPs；单张 A100 实际有效算力约 312 TFLOPS × MFU 40% ≈ 1.25e14 FLOPS → 单卡约 10.7 年 → 64 张卡约 60 天。</p>
+<h3>3.8 训练稳定性</h3>
+<ul>
+<li>loss spike 常见原因：脏数据 batch、数值溢出。处理：跳过该 step 回滚到上个 checkpoint、加大 batch/lr 调整、warmup、梯度裁剪（如 1.0）。</li>
+<li>加分项：数据侧做"波动归因"——spike 常能定位到某批新引入的数据。</li>
+</ul>
+<hr />
+<h2 id="d1-6">4. 微调与对齐（最高频章节）</h2>
+<h3>4.1 SFT</h3>
+<ul>
+<li>数据：(instruction, response) 对，多轮对话要套 chat template；<strong>loss mask 只对回复部分计算</strong>。</li>
+<li>数据质量 &gt; 数量：LIMA 用约 1k 条精选数据就能对齐好；高质量 CoT 数据能提升推理。</li>
+<li>超参：全参微调 lr ~1e-5～2e-5，1–3 个 epoch；过拟合表现为通用能力下降（灾难性遗忘）。</li>
+<li>防遗忘：混入通用数据（常见比例 5:1 左右）、降低 lr、减少 epoch、用 LoRA。</li>
+</ul>
+<h3>4.2 LoRA / PEFT（必考）</h3>
+<ul>
+<li>假设：微调时权重更新 ΔW 是<strong>低秩</strong>的。用 <code>ΔW = B·A</code> 近似，A ∈ R^(r×k) 高斯初始化，B ∈ R^(d×r) <strong>零初始化</strong>（保证起点等价于原模型）。</li>
+<li>冻结原模型，只训 A、B；参数量 ≈ r×(d+k)，7B 模型 r=16、作用于 q/k/v/o + MLP 时约 40M（~0.5%）。</li>
+<li>秩选择：r=8～64，简单任务 8 就够，领域差距大可加大；α 通常设为 r 或 2r（缩放 α/r）。</li>
+<li>优点：显存省、可插拔（一个基座挂多个 LoRA，S-LoRA 多租户服务）、推理前可 merge 回原权重<strong>零额外延迟</strong>。</li>
+<li><strong>QLoRA</strong> 三件套：① NF4 4-bit 量化冻结基座；② Double Quantization（把量化常数再量化）；③ Paged Optimizer（显存尖峰时用统一内存换页）。65B 也能单卡 48G 微调；反传时临时反量化到 bf16 计算。</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>注入位置</th>
+<th>推理开销</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adapter</td>
+<td>层间插瓶颈模块</td>
+<td>有（延迟增加）</td>
+<td>最早的方法</td>
+</tr>
+<tr>
+<td>Prefix Tuning</td>
+<td>每层加可训练前缀 KV</td>
+<td>占上下文</td>
+<td></td>
+</tr>
+<tr>
+<td>Prompt Tuning</td>
+<td>只学 embedding 层软提示</td>
+<td>占上下文</td>
+<td>模型越大越有效</td>
+</tr>
+<tr>
+<td>LoRA</td>
+<td>权重低秩旁路</td>
+<td>可为 0</td>
+<td>当前默认选择</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4.3 RLHF（必考，建议能手画三阶段图）</h3>
+<p><strong>三阶段：SFT → 训练奖励模型 RM → PPO 强化学习。</strong></p>
+<ul>
+<li><strong>RM</strong>：人类对同一 prompt 的两个回答做偏好标注，用 Bradley-Terry 模型 <code>P(y_w ≻ y_l) = σ(r(y_w) − r(y_l))</code>，loss = −log σ(r_w − r_l)。通常用 SFT 模型初始化。</li>
+<li><strong>PPO</strong>：</li>
+<li>目标 = clipped surrogate <code>min(r_t·A_t, clip(r_t, 1−ε, 1+ε)·A_t)</code> <strong>− β·KL(π_θ ‖ π_ref)</strong>。</li>
+<li>内存里同时有 <strong>4 个模型</strong>：actor（在学习）、critic（估 value 算优势）、ref（冻结的 SFT 模型算 KL）、RM（冻结打分）——显存开销大，这是后来 GRPO/DPO 出现的直接原因。</li>
+<li><strong>KL 惩罚的作用</strong>：防止策略飘离 SFT 分布太远，避免 reward hacking（钻 RM 空子）和语言模式退化（套话、乱码）。</li>
+<li>常见问题：超参敏感、训练不稳、reward hacking（例：模型学会写长废话、重复，因为 RM 偏好长回答）。</li>
+</ul>
+<h3>4.4 DPO（必考）</h3>
+<ul>
+<li>核心推导：KL 约束的 RLHF 有闭式最优解 <code>π*(y|x) ∝ π_ref(y|x)·exp(r(y,x)/β)</code>，反解出 <code>r = β·log(π/π_ref) + 常数</code>，代回 Bradley-Terry 得到<strong>直接在偏好对上的损失</strong>：</li>
+</ul>
+<pre><code>L = −log σ( β·log[π_θ(y_w|x)/π_ref(y_w|x)] − β·log[π_θ(y_l|x)/π_ref(y_l|x)] )
+</code></pre>
+<ul>
+<li>优点：不需要 RM、不需要在线采样、实现简单稳定；隐式奖励就是 <code>β·log(π/π_ref)</code>。</li>
+<li>缺点：离线算法，对数据分布敏感，样本效率不如调好的在线 RL，推理类任务上通常弱于在线 RL。</li>
+<li>一句话区分：<strong>PPO = 在线 + 显式 RM + critic；DPO = 离线 + 隐式奖励 + 无 RM</strong>。</li>
+</ul>
+<h3>4.5 GRPO 与推理模型（R1/o1 风格，当前热点）</h3>
+<ul>
+<li><strong>GRPO</strong>（DeepSeek）：对每个 prompt 采样一组 G 个回答，组内归一化奖励当优势 <code>A_i = (r_i − mean)/std</code>，<strong>去掉 critic</strong>（省一半显存），保留 clip + KL（用无偏估计）。</li>
+<li><strong>RLVR（可验证奖励 RL）</strong>：数学答案可精确匹配、代码可跑单测 → 奖励可自动大规模生成，不需要人标偏好。</li>
+<li><strong>DeepSeek-R1 流程</strong>（能讲出来很加分）：R1-Zero 纯 RL 直接在基座上训练，涌现长 CoT 和反思（"aha moment"）→ 但可读性差；R1 用少量 cold-start SFT → 推理 RL → 拒绝采样生成 SFT 数据再训 → 全场景 RL 的多阶段流程；并蒸馏到小模型。</li>
+<li>其他名词一句话：KTO（非成对偏好）、ORPO（单阶段、odds-ratio、无需 ref）、SimPO（长度归一化、无 ref）。</li>
+</ul>
+<hr />
+<h2 id="d1-7">5. 推理与部署（应用岗 &amp; 系统岗必考）</h2>
+<h3>5.1 解码策略</h3>
+<ul>
+<li>temperature：对 logits 除 T 再 softmax，T&lt;1 更确定，T→0 等价 greedy。</li>
+<li>top-k：只保留概率最高的 k 个；top-p（nucleus）：保留累计概率达 p 的最小集合，自适应候选数。</li>
+<li>repetition / frequency / presence penalty：压制重复。</li>
+<li><strong>为什么对话不用 beam search</strong>：开放式生成中 beam search 倾向产出通用、平淡、"安全"的文本（语言模型对"人人都说"的句子概率高），且计算贵；翻译/摘要等有明确答案的任务仍可用。</li>
+<li>多轮对话和结构化输出（JSON mode / constrained decoding，如 outlines、guidance）是加分追问点。</li>
+</ul>
+<h3>5.2 Prefill 与 Decode（必考）</h3>
+<ul>
+<li><strong>Prefill</strong>（处理 prompt）：整段并行计算，<strong>计算瓶颈（compute-bound）</strong>，决定 TTFT（首 token 延迟）。</li>
+<li><strong>Decode</strong>（逐 token 生成）：每步只算 1 个 token，访存远大于计算，<strong>显存带宽瓶颈（memory-bound）</strong>，决定 TPOT（每 token 延迟）。</li>
+<li>推论：decode 阶段加大 batch 几乎不增加单步耗时（权重加载被摊薄）→ 吞吐和 batch 强相关；优化方向也完全不同：</li>
+<li>降 TTFT：chunked prefill（避免长 prompt 阻塞）、prefix caching（system prompt 复用）、更快的 kernel。</li>
+<li>降 TPOT / 提吞吐：continuous batching、投机解码、量化、PagedAttention 提高并发。</li>
+</ul>
+<h3>5.3 vLLM 的两个核心贡献（必考）</h3>
+<ul>
+<li><strong>PagedAttention</strong>：仿操作系统虚拟内存，把 KV cache 切成固定大小的 block + 块表管理。消除内外碎片、支持按需分配和 copy-on-write（beam search/并行采样共享前缀），显存利用率大幅提高 → 并发 batch 更大 → 吞吐数倍提升。</li>
+<li><strong>Continuous Batching</strong>：以迭代（每生成一个 token）为粒度调度，完成的请求立刻退出、新请求随时加入；静态 batching 要等整批都完成。</li>
+</ul>
+<h3>5.4 量化（必考，能对比着讲）</h3>
+<ul>
+<li>术语：PTQ（训后量化）vs QAT（量化感知训练）；weight-only vs weight+activation。</li>
+<li><strong>LLM 的量化难点：激活中有离群值（outliers），集中在少数通道，幅值极大。</strong></li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>思路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM.int8()</td>
+<td>把 outlier 通道拆出来用 fp16 算，其余 INT8</td>
+</tr>
+<tr>
+<td>SmoothQuant</td>
+<td>把激活的 outlier"平滑"迁移到权重上（等效缩放），实现 W8A8</td>
+</tr>
+<tr>
+<td>GPTQ</td>
+<td>逐层 PTQ：基于近似 Hessian 做误差补偿，逐列量化并调整未量化权重；4-bit，group size 128 常见</td>
+</tr>
+<tr>
+<td>AWQ</td>
+<td>激活感知：少量显著权重通道对效果影响大，通过 per-channel 缩放保护它们；更鲁棒</td>
+</tr>
+<tr>
+<td>FP8</td>
+<td>Hopper 架构原生支持，训练（E5M2）与推理（E4M3）都在用</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>经验：W4A16（GPTQ/AWQ）通常掉点 1–2% 以内，显存省约 3/4，是小显存部署的默认选项。</li>
+</ul>
+<h3>5.5 投机解码（Speculative Decoding，必考）</h3>
+<ul>
+<li>流程：小草稿模型自回归地起草 k 个 token → 大模型<strong>一次前向并行验证</strong>这 k 个 token → 按拒绝采样决定接受/回退。</li>
+<li>关键性质：<strong>接受/拒绝的数学设计保证最终输出分布与大模型单独采样完全一致</strong>（无损加速）。</li>
+<li>为什么有效：decode 是 memory-bound，大模型一次前向能验证多个 token，等于把带宽用满；加速比受草稿接受率 γ 限制（≈ 1/(1−γ) 量级）。</li>
+<li>变体：self-speculative（Medusa 多头、EAGLE 特征层草稿）、n-gram/prompt lookup（无小模型，从上下文里抄）。</li>
+<li>适用条件：接受率高的任务（代码、模板化文本）收益大；小模型与大模型分布差异大时收益差。</li>
+</ul>
+<h3>5.6 长上下文技术（知道每层在解决什么）</h3>
+<ul>
+<li>位置外推：PI / NTK / YaRN（见 1.3）。</li>
+<li>注意力显存：FlashAttention（见 5.7）、滑动窗口（Mistral）、attention sink（StreamingLLM：保留最初几个 token 才能稳定无限流式）。</li>
+<li>系统层：Ring Attention / 上下文并行（把序列切到多卡）、KV cache 量化/淘汰（H2O、SnapKV）、prefix caching。</li>
+<li>效果层面：长上下文"大海捞针"测试能过，但<strong>多跳推理仍会随长度衰减</strong>（lost in the middle）。</li>
+</ul>
+<h3>5.7 FlashAttention（必考）</h3>
+<ul>
+<li>解决什么：attention 的 T×T 中间矩阵在 HBM 显存里反复读写，IO 是瓶颈。</li>
+<li>怎么做：分块（tiling）计算 + <strong>online softmax</strong>（分块累积 softmax 的归一化项），注意力矩阵不落地 HBM，显存从 O(T²) 降到 O(T)，速度显著提升。</li>
+<li>关键卖点：<strong>数学上精确等价</strong>，不是近似；是 IO-aware 的 kernel 实现。</li>
+</ul>
+<h3>5.8 服务化指标与权衡</h3>
+<ul>
+<li>指标：TTFT、TPOT、吞吐（tokens/s）、goodput（满足 SLO 的有效吞吐）。</li>
+<li>框架：vLLM（PagedAttention）、SGLang（RadixAttention 前缀树缓存，结构化生成快）、TensorRT-LLM（NVIDIA 深度优化）、llama.cpp（端侧 CPU/混合）。</li>
+<li>进阶：prefill/decode 分离部署（disaggregation，如 Mooncake）、多 LoRA 复用基座、KV cache 跨请求复用。</li>
+</ul>
+<hr />
+<h2 id="d1-8">6. RAG（应用岗必考）</h2>
+<h3>6.1 为什么需要 RAG</h3>
+<p>知识时效性（模型有训练截止日期）、私有知识（模型没见过）、<strong>可溯源</strong>（给引用）、比微调便宜可控、易于更新（换库不换模型）。
+一句话分工：<strong>RAG 管"知识"，微调管"能力/风格/格式"</strong>。</p>
+<h3>6.2 完整链路（建议背熟，按环节说优化点）</h3>
+<pre><code>文档加载 → 切分(chunking) → Embedding → 向量库索引 → 检索 top-k
+→ 重排(rerank) → 拼 Prompt → LLM 生成(带引用) → 评估
+</code></pre>
+<ul>
+<li><strong>切分</strong>：固定长度 + overlap 是基线；更好是递归按分隔符、语义切分；PDF/表格要布局感知解析；<strong>small-to-big</strong>：用小块检索、父块喂给生成器（检索要精准、生成要上下文）。</li>
+<li><strong>Embedding</strong>：双塔模型（bge/gte/e5），查询侧可加 instruction；索引用 HNSW（图索引，ef 参数权衡召回/速度）或 IVF-PQ（压缩）。</li>
+<li><strong>检索</strong>：<strong>混合检索</strong>（BM25 + 向量，RRF 融合）应对关键词精确匹配（型号、代码）与语义泛化的互补；元数据过滤。</li>
+<li><strong>重排</strong>：cross-encoder（bge-reranker）对 (query, passage) 联合编码，精但贵 → 只对 top 20–50 精排。</li>
+<li><strong>查询侧优化</strong>：query 改写、多查询扩展、<strong>HyDE</strong>（让 LLM 先生成假设性文档再拿去检索）、多跳问题做分解/迭代检索。</li>
+</ul>
+<h3>6.3 高级变体（说出 2–3 个即可）</h3>
+<ul>
+<li><strong>Self-RAG</strong>：模型自己决定何时检索、并生成反思 token 评价检索结果和答案。</li>
+<li><strong>CRAG</strong>：加一个检索质量评估器，不合格就触发 web 搜索兜底，重写查询。</li>
+<li><strong>GraphRAG</strong>：抽取实体关系建知识图谱 + 社区摘要，解决"全局性/多跳"问题（如"这份数据集的主要主题是什么"）。</li>
+</ul>
+<h3>6.4 评估（RAG 面试的区分点）</h3>
+<ul>
+<li>检索侧：recall@k、MRR、nDCG（要标注 golden chunk）。</li>
+<li>生成侧：<strong>RAGAS</strong> 三指标——faithfulness（答案是否忠于上下文）、answer relevance（是否切题）、context precision/recall（检索质量）。</li>
+<li>实践：构建带标准答案的小评测集 + LLM-as-judge，上线前回归测试。</li>
+</ul>
+<h3>6.5 RAG vs 长上下文 vs 微调（对比题）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>RAG</th>
+<th>长上下文塞文档</th>
+<th>微调</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>知识更新</td>
+<td>换库即生效</td>
+<td>每次都要塞</td>
+<td>要重训</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>索引+检索便宜</td>
+<td>每 token 成本高、KV 显存大</td>
+<td>训练贵</td>
+</tr>
+<tr>
+<td>可溯源</td>
+<td>好</td>
+<td>差</td>
+<td>无</td>
+</tr>
+<tr>
+<td>深度行为/风格</td>
+<td>学不会</td>
+<td>—</td>
+<td>好</td>
+</tr>
+<tr>
+<td>典型用法</td>
+<td>知识问答</td>
+<td>单次长文档分析</td>
+<td>格式、语气、领域能力</td>
+</tr>
+</tbody>
+</table></div>
+<p>实践中三者常组合（微调过检索/引用行为的模型 + RAG）。</p>
+<h3>6.6 常见故障与排查（工程面试爱问）</h3>
+<ul>
+<li>检索不到：embedding 与领域不匹配（换模型/微调 embedding）、chunk 太碎、query 口语化（改写）、top-k 太小。</li>
+<li>检索到了但答错：上下文太长 lost in the middle → rerank 后放前面；冲突来源 → 加时间戳/权威性信号。</li>
+<li>幻觉：prompt 强制"只依据上下文回答，找不到就说不知道" + 引用校验。</li>
+</ul>
+<hr />
+<h2 id="d1-9">7. Agent 与工具调用</h2>
+<ul>
+<li><strong>ReAct 范式</strong>：Thought → Action → Observation 循环；推理和行动交替，Observation 来自工具。</li>
+<li><strong>Function Calling</strong>：把工具的名称/描述/JSON Schema 放进 prompt，模型输出结构化调用；是否可用要看模型是否训过工具调用格式；支持并行调用。</li>
+<li><strong>规划</strong>：CoT（单线思考）、ToT（树搜索）、Plan-and-Execute（先全局计划再逐步执行）、Reflexion（失败后自我反思重试）。</li>
+<li><strong>记忆</strong>：短期 = 上下文窗口（满了要压缩/摘要）；长期 = 向量库或结构化文件；经验复用（Voyager 的技能库思想）。</li>
+<li><strong>MCP（Model Context Protocol）</strong>：Anthropic 推出的开放协议，标准化"模型 ↔ 工具/资源"的接入方式（类比 USB-C），一次写 server 多个客户端可用，解决 M×N 集成问题。</li>
+<li><strong>多 Agent</strong>：orchestrator-worker（主从分工）、辩论（互相挑错提升事实性）、角色扮演；代价是 token 成本和误差累积，<strong>能用单 Agent 解决就不要上多 Agent</strong>（实用观点，面试官爱听）。</li>
+<li><strong>工程稳定性</strong>（应用岗重点）：工具参数校验与重试、最大迭代次数防死循环、代码执行沙箱、人审检查点、全链路 tracing、失败案例分析集；评估用 AgentBench / WebArena / SWE-bench / τ-bench 等。</li>
+</ul>
+<hr />
+<h2 id="d1-10">8. 评测、幻觉与安全</h2>
+<h3>8.1 幻觉（必考）</h3>
+<ul>
+<li>分类：<strong>事实性幻觉</strong>（与客观事实不符）vs <strong>忠实性幻觉</strong>（与给定上下文/指令不符，如摘要里编内容）。</li>
+<li>成因：本质是 LLM 是"下一个词概率模型"而非知识库——它对"流利"的偏好大于对"真"的偏好；训练数据有错；RLHF 导致讨好（sycophancy）；知识截止日期；采样随机性；模型不知道自己知识的边界（校准差）。</li>
+<li>缓解：RAG + 强制引用；Self-Consistency（多次采样投票）；Chain-of-Verification（生成→自检→修正）；让模型学会说"不知道"（校准、拒答）；解码约束；RLVR 式事实性奖励；输出后用检索做事实核查。</li>
+</ul>
+<h3>8.2 常用榜单（知道每个测什么即可）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>榜单</th>
+<th>测什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MMLU / MMLU-Pro</td>
+<td>57 科知识选择（Pro 更难、10 选项）</td>
+</tr>
+<tr>
+<td>GPQA</td>
+<td>研究生级科学推理</td>
+</tr>
+<tr>
+<td>GSM8K / MATH</td>
+<td>小学应用题 / 竞赛数学</td>
+</tr>
+<tr>
+<td>HumanEval / MBPP</td>
+<td>代码 pass@1</td>
+</tr>
+<tr>
+<td>SWE-bench</td>
+<td>真实仓库 issue 修复</td>
+</tr>
+<tr>
+<td>MT-Bench / Arena-Hard</td>
+<td>多轮对话质量（LLM judge）</td>
+</tr>
+<tr>
+<td>Chatbot Arena</td>
+<td>人类盲测投票 Elo</td>
+</tr>
+<tr>
+<td>LongBench / RULER</td>
+<td>长上下文</td>
+</tr>
+<tr>
+<td>IFEval</td>
+<td>指令遵循（可验证约束）</td>
+</tr>
+<tr>
+<td>C-Eval / CMMLU</td>
+<td>中文知识</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>LLM-as-judge 的偏差</strong>：位置偏差（偏爱第一个）、长度偏差（偏爱长的）、自我偏好（偏爱自己家模型）；缓解：交换位置取平均、配 reference 答案、多 judge、详细 rubric。</li>
+<li><strong>数据污染</strong>：评测集泄漏进训练数据 → 去污染、动态/私有评测集、人工 Arena。</li>
+</ul>
+<h3>8.3 安全</h3>
+<ul>
+<li>训练侧：安全 SFT/RLHF、拒答边界；推理侧：system prompt、输入输出分类器。</li>
+<li>越狱类型：角色扮演、编码绕过、多轮诱导、对抗后缀（GCG）等；红队测试是标配。</li>
+<li>隐私：训练数据中的 PII、成员推断攻击、记忆（模型能背出训练样本）。</li>
+</ul>
+<hr />
+<h2 id="d1-11">9. 多模态</h2>
+<ul>
+<li><strong>CLIP</strong>：图文双塔 + 对比学习（InfoNCE），4 亿图文对训练；zero-shot 分类 = 把类别名做成 prompt 算相似度；大量用作 VLM 的视觉编码器。短板：组合性（绑不住属性与对象）。</li>
+<li><strong>VLM 通用架构 = 视觉编码器 + 连接模块 + LLM</strong>：</li>
+<li><strong>LLaVA</strong>：CLIP ViT 特征过一层 MLP 投影进 LLM，简单但有效（配 GPT-4 生成的指令数据）。</li>
+<li><strong>BLIP-2</strong>：Q-Former——32 个可学习 query 对图像做 cross-attention，压缩成少量 token 喂给 LLM，两阶段预训练。</li>
+<li><strong>Flamingo</strong>：Perceiver Resampler + 门控 cross-attention 层插进 LLM，支持图文交错。</li>
+<li><strong>Qwen2-VL</strong>：原生动态分辨率（不同图不同数量 token）+ M-RoPE，视频友好。</li>
+<li><strong>视觉 token 数 = (H/14)×(W/14)</strong>（patch 14），高分辨率图片 token 爆炸是主要成本 → 压缩手段：pooling、pixel shuffle、resampler、动态分辨率。</li>
+<li>训练范式：阶段 1 冻结视觉塔和 LLM 只训投影层（对齐）→ 阶段 2 端到端 SFT；数据从图文对 → 交错文档 → 指令数据。</li>
+<li>文档/OCR 场景要高分辨率和布局理解；视频 = 采样帧 + 时序建模。</li>
+</ul>
+<hr />
+<h2 id="d1-12">10. 工程与手撕题汇总</h2>
+<ol>
+<li>手写 Multi-Head Attention —— 见 1.8（最高频）。</li>
+<li>实际工程写 attention：<code>F.scaled_dot_product_attention(q,k,v, is_causal=True)</code>。</li>
+<li>显存计算题 —— 见 3.7（7B 训练 112 GB、推理 14 GB + KV 0.5 MB/token）。</li>
+<li>训练成本：FLOPs ≈ 6ND —— 见 3.7 的 64 卡 60 天例题。</li>
+<li>上下文从 8k 扩到 128k，KV cache 变化：线性 ×16；优化：GQA/MLA、KV 量化、淘汰、上下文并行。</li>
+<li>系统设计题模板（"设计一个文档问答系统 / LLM 网关"）：先问清规模与 SLO → 数据链路（解析/切分/索引）→ 检索与重排 → 生成与引用 → 评估与监控 → 成本优化（缓存、量化、小模型路由）。</li>
+<li>降本三板斧：模型侧（量化、蒸馏、小模型路由）、系统侧（prefix cache、continuous batching）、业务侧（缓存高频问答、限制输出长度）。</li>
+</ol>
+<hr />
+<h2 id="d1-13">11. 高频问答速查清单（面试前一晚过一遍）</h2>
+<p><strong>基础结构</strong>
+1. Attention 为什么除 √d_k？—— 防点积方差随 d_k 增大使 softmax 饱和、梯度消失。
+2. Self-attention 的复杂度？—— O(T²·d)，长文本瓶颈。
+3. RoPE 是绝对还是相对位置编码？—— 实现绝对、效果相对（内积只依赖相对位置）。
+4. Pre-LN 和 Post-LN 区别？—— Pre-LN 梯度稳、训练不需精细 warmup，是现代标配。
+5. RMSNorm vs LayerNorm？—— 去掉均值中心化，省计算效果不降。
+6. SwiGLU 是什么？—— 门控 FFN：W2(Swish(W1x)⊙W3x)，隐层约 8/3·d。
+7. 为什么 Decoder-only 成为主流？—— CLM 每token都有损失、scaling 涌现、KV cache 推理友好。
+8. KV cache 存什么、多大？—— 存历史 K/V；2×层数×kv头×头维×序列长×精度字节，7B 约 0.5MB/token。
+9. GQA/MQA/MLA？—— 共享/压缩 KV head 减 cache；MLA 低秩隐向量压缩约 90%。</p>
+<p><strong>Tokenizer/预训练</strong>
+10. BPE 原理？—— 迭代合并最高频相邻 pair；byte-level 无 OOV。
+11. 词表越大越好吗？—— 不是；压缩率 vs embedding 参数与低频训练不足。
+12. Chinchilla 结论？—— 计算最优 tokens≈20×参数；实际为省推理成本常过度训练。
+13. ZeRO 三阶段？—— 切优化器状态 / +梯度 / +参数，阶段3≈FSDP。
+14. TP 和 PP 通信差别？—— TP 每层两次 all-reduce 通信重放节点内；PP 只传 stage 边界激活，有 bubble (p−1)/(m+p−1)。
+15. 为什么混合精度要 fp32 master 权重？—— fp16 累加更新误差大、可能不更新。
+16. bf16 vs fp16？—— bf16 指数位同 fp32、无需 loss scaling，训练更稳。
+17. loss spike 怎么处理？—— 回滚 checkpoint 跳过、查数据、grad clip、warmup。
+18. MoE 为什么需要负载均衡？—— 防 router 塌缩到少数 expert。</p>
+<p><strong>微调对齐</strong>
+19. LoRA 为什么有效？—— 微调更新低秩；A 高斯 B 零初始化保证起点等价；可 merge 零推理开销。
+20. QLoRA 三个技术？—— NF4、双重量化、paged optimizer。
+21. RLHF 三阶段？—— SFT → RM(BT 模型成对偏好) → PPO。
+22. PPO 里 KL 惩罚干嘛的？—— 约束策略不偏离 SFT/ref，防 reward hacking 和语言退化。
+23. PPO 需要哪 4 个模型？—— actor、critic、ref、RM（显存大 → GRPO/DPO 动机）。
+24. DPO 损失怎么来的？—— KL 约束 RLHF 闭式解反解奖励代入 Bradley-Terry。
+25. DPO vs PPO？—— 离线无 RM vs 在线有 RM；DPO 简单稳定但样本效率低。
+26. GRPO 改进点？—— 组内采样归一化当优势，去掉 critic。
+27. R1 训练流程？—— cold-start SFT → 推理 RL(RLVR) → 拒绝采样 SFT → 全场景 RL。
+28. 灾难性遗忘怎么缓解？—— 混通用数据、小 lr、少 epoch、LoRA。</p>
+<p><strong>推理部署</strong>
+29. temperature/top-p 含义？—— softmax 温度；核采样按累计概率截断。
+30. 为什么对话不用 beam search？—— 产出通用平淡文本且贵。
+31. prefill 和 decode 各是什么瓶颈？—— prefill 计算瓶颈定 TTFT；decode 带宽瓶颈定 TPOT。
+32. PagedAttention 解决什么？—— KV cache 分页管理，消灭碎片、支持 COW，提高并发吞吐。
+33. Continuous batching？—— 迭代级调度，随完随走，吞吐大增。
+34. GPTQ vs AWQ？—— Hessian 误差补偿 vs 激活感知保护显著通道；都是 W4。
+35. 量化的核心难点？—— 激活离群值 → LLM.int8 分解 / SmoothQuant 迁移。
+36. 投机解码为什么无损？—— 拒绝采样设计保证输出分布等于目标模型。
+37. 投机解码什么时候收益大？—— decode 带宽瓶颈 + 草稿接受率高（代码、模板文本）。
+38. FlashAttention 为什么快？—— 分块 + online softmax，不落地 N² 矩阵，IO-aware 且数学精确等价。
+39. 长上下文外推？—— PI 线性内插 / NTK 改 base / YaRN 分频段+温度。</p>
+<p><strong>RAG/Agent/其他</strong>
+40. RAG 完整链路？—— 切分→向量化→检索(混合)→重排→生成带引用→评估(RAGAS)。
+41. 检索不准怎么排查？—— embedding 领域匹配、chunk 粒度、query 改写/HyDE、混合检索、rerank、top-k。
+42. 双塔 vs cross-encoder？—— 双塔可离线索引快用于召回；cross-encoder 精用于重排。
+43. RAG vs 微调？—— RAG 管知识（时效/溯源），微调管能力与风格。
+44. lost in the middle？—— 长上下文中间信息利用率低；rerank 后把关键内容放两头。
+45. ReAct？—— Thought-Action-Observation 循环的 agent 范式。
+46. MCP 是什么？—— 标准化模型与工具/资源连接的开放协议。
+47. 幻觉怎么缓解？—— RAG+引用、自一致性、CoV、学会拒答、事实性奖励。
+48. LLM-as-judge 有什么偏差？—— 位置、长度、自我偏好；用换位+rubric+参考答案缓解。
+49. 怎么发现数据污染？—— n-gram 重叠检测、动态评测集、人工 Arena。
+50. CLIP 原理？—— 图文双塔对比学习，zero-shot 分类；LLaVA=MLP 投影，BLIP-2=Q-Former 压缩视觉 token。</p>
+<hr />
+<h2 id="d1-14">12. 复习路线与面试软技巧</h2>
+<p><strong>3 天冲刺路线</strong>
+- Day 1：第 1 章（手写 attention 跑一遍）+ 第 4 章（LoRA/RLHF/DPO 推导自己推一遍）。
+- Day 2：第 3 章（显存与 FLOPs 计算题练熟）+ 第 5 章（KV cache 计算、量化对比、投机解码）。
+- Day 3：第 6–8 章 + 第 11 章速查清单过两遍 + 把自己项目的"难点-方案-量化收益"各准备 3 个故事。</p>
+<p><strong>项目讲述框架</strong>：背景与指标 → 我的方案与备选方案对比 → 遇到的坑与定位过程 → 量化收益（延迟降 x%、召回率提 y 点）。面试官追问的几乎都是"为什么这么选、还有什么别的办法"。</p>
+<p><strong>常见反问参考</strong>：团队目前模型是自研还是微调开源？训练/推理算力规模？RAG/Agent 落地到什么阶段、最大的瓶颈是什么？入职后前三个月的期望产出？</p>
+<hr />
+<p><em>整理日期：2026-10-20。建议结合最新论文和目标公司的技术博客滚动更新（Agent、推理模型 RL 这两个方向变化最快）。</em></p></article>
+</main>
+</body>
+</html>
