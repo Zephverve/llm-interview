@@ -55,6 +55,26 @@ th,td{border:1px solid var(--border);padding:6px 9px;text-align:left;vertical-al
 th{background:var(--code-bg)}
 hr{border:none;border-top:1px solid var(--border);margin:2em 0}
 li{margin:.25em 0}
+/* ---- 背题模式 ---- */
+.btn{display:inline-block;padding:9px 16px;border-radius:9px;border:1px solid var(--border);
+background:var(--card);color:var(--fg);font-size:14.5px;cursor:pointer;margin:4px 6px 4px 0;user-select:none}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.on{background:#e5534b;color:#fff;border-color:#e5534b}
+.btn.ghost{font-size:13.5px;padding:6px 12px}
+label.chk{display:inline-flex;align-items:center;gap:5px;margin:4px 10px 4px 0;font-size:14px;cursor:pointer}
+select{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:14px}
+.box{border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:10px 0}
+.box .bt{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.pcard{border:1px solid var(--border);border-radius:12px;padding:20px;background:var(--card)}
+.qtext{font-size:1.12em;font-weight:600;line-height:1.65;margin:10px 0 4px}
+.atext{margin-top:14px;padding-top:14px;border-top:1px dashed var(--border);animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:var(--code-bg);
+color:var(--muted);margin:0 6px 6px 0}
+.prog{height:6px;background:var(--code-bg);border-radius:99px;overflow:hidden;margin:12px 0}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.hint{color:var(--muted);font-size:13px}
 @media(max-width:1099px){.layout{grid-template-columns:1fr;padding:14px 12px 80px}aside{display:none}}
 @media(min-width:1100px){article{padding:30px 38px}body{font-size:16.5px}}
 </style>
@@ -64,6 +84,7 @@ li{margin:.25em 0}
   <span class="title">📱 大模型面试教程</span>
   <a href="#doc0">教程</a>
   <a href="#doc1">速查</a>
+  <a href="#doc2">🎯 背题</a>
   <details>
     <summary>📖 目录 / 跳转</summary>
     <nav><a class="ch" href="#d0-1">教程 · 大模型面试教程（含真题与项目专题）</a>
@@ -146,7 +167,8 @@ li{margin:.25em 0}
 <a class="ch" href="#d1-11">速查手册 · 9. 多模态</a>
 <a class="ch" href="#d1-12">速查手册 · 10. 工程与手撕题汇总</a>
 <a class="ch" href="#d1-13">速查手册 · 11. 高频问答速查清单（面试前一晚过一遍）</a>
-<a class="ch" href="#d1-14">速查手册 · 12. 复习路线与面试软技巧</a></nav>
+<a class="ch" href="#d1-14">速查手册 · 12. 复习路线与面试软技巧</a>
+<a class="ch" href="#doc2">背题模式</a></nav>
   </details>
 </header>
 <div class="layout">
@@ -181,6 +203,7 @@ li{margin:.25em 0}
 <a class="ch" href="#d1-12">10. 工程与手撕题汇总</a>
 <a class="ch" href="#d1-13">11. 高频问答速查清单（面试前一晚过一遍）</a>
 <a class="ch" href="#d1-14">12. 复习路线与面试软技巧</a>
+<a class="ch" href="#doc2">🎯 背题模式</a>
   </aside>
   <main>
   <article id="doc0"><h1 id="d0-1">大模型面试教程（含真题与项目专题）</h1>
@@ -1930,6 +1953,133 @@ mask = torch.tril(torch.ones(T, T, dtype=torch.bool))
 <p><strong>常见反问参考</strong>：团队目前模型是自研还是微调开源？训练/推理算力规模？RAG/Agent 落地到什么阶段、最大的瓶颈是什么？入职后前三个月的期望产出？</p>
 <hr />
 <p><em>整理日期：2026-10-20。建议结合最新论文和目标公司的技术博客滚动更新（Agent、推理模型 RL 这两个方向变化最快）。</em></p></article>
+
+<article id="doc2">
+<h1>🎯 背题模式</h1>
+<p class="hint">从题库随机抽题、翻卡背答案；「标记不会」的题存在本机浏览器里，可以专门重练。今日一练按日期固定，当天刷新都是同一批。</p>
+
+<div id="p-home">
+  <div class="box">
+    <div class="bt">开始方式</div>
+    <button class="btn primary" onclick="todayStart()">📅 今日一练（10 题）</button>
+    <span class="hint" id="today-stat"></span>
+  </div>
+  <div class="box">
+    <div class="bt">题库来源</div>
+    <label class="chk"><input type="checkbox" class="src" value="速查" checked onchange="refreshCats()"> 速查（一句话答案）</label>
+    <label class="chk"><input type="checkbox" class="src" value="真题" checked onchange="refreshCats()"> 真题（详解）</label>
+    <label class="chk"><input type="checkbox" id="onlymarks" onchange="stat()"> 只练「标记不会」的题（<span id="markcount">0</span>）</label>
+  </div>
+  <div class="box">
+    <div class="bt">分类筛选</div>
+    <div id="cats"></div>
+  </div>
+  <div class="box">
+    <div class="bt">每组题数</div>
+    <select id="pcount">
+      <option value="5">5 题</option>
+      <option value="10" selected>10 题</option>
+      <option value="15">15 题</option>
+      <option value="20">20 题</option>
+      <option value="999">全部</option>
+    </select>
+    <button class="btn primary" onclick="customStart()">开始练习</button>
+    <span class="hint" id="pool-stat"></span>
+  </div>
+</div>
+
+<div id="p-quiz" style="display:none">
+  <div class="prog"><i id="p-bar" style="width:0%"></i></div>
+  <div>
+    <span class="tag" id="p-prog"></span>
+    <span class="tag" id="p-src"></span>
+    <span class="tag" id="p-cat"></span>
+  </div>
+  <div class="pcard">
+    <div class="qtext" id="p-q"></div>
+    <div id="p-a" style="display:none"></div>
+    <div style="margin-top:16px">
+      <button class="btn primary" id="p-reveal" onclick="toggleAnswer()">显示答案</button>
+      <button class="btn" id="p-mark" onclick="toggleMark()">🔖 标记不会</button>
+      <button class="btn ghost" onclick="nav(-1)">← 上一题</button>
+      <button class="btn ghost" onclick="nav(1)">下一题 →</button>
+      <button class="btn ghost" onclick="quit()">结束</button>
+    </div>
+  </div>
+  <p class="hint" id="p-markhint"></p>
+</div>
+
+<div id="p-done" style="display:none">
+  <div class="pcard">
+    <h2 style="margin-top:0">🎉 本组完成</h2>
+    <p id="done-stat"></p>
+    <button class="btn primary" onclick="again()">再来一组</button>
+    <button class="btn" onclick="quit()">返回设置</button>
+  </div>
+</div>
+</article>
+<script>
+const BANK=[{"id":0,"s":"速查","c":"基础结构","q":"Attention 为什么除 √d_k？","ah":"<p>防点积方差随 d_k 增大使 softmax 饱和、梯度消失。<\/p>"},{"id":1,"s":"速查","c":"基础结构","q":"Self-attention 的复杂度？","ah":"<p>O(T²·d)，长文本瓶颈。<\/p>"},{"id":2,"s":"速查","c":"基础结构","q":"RoPE 是绝对还是相对位置编码？","ah":"<p>实现绝对、效果相对（内积只依赖相对位置）。<\/p>"},{"id":3,"s":"速查","c":"基础结构","q":"Pre-LN 和 Post-LN 区别？","ah":"<p>Pre-LN 梯度稳、训练不需精细 warmup，是现代标配。<\/p>"},{"id":4,"s":"速查","c":"基础结构","q":"RMSNorm vs LayerNorm？","ah":"<p>去掉均值中心化，省计算效果不降。<\/p>"},{"id":5,"s":"速查","c":"基础结构","q":"SwiGLU 是什么？","ah":"<p>门控 FFN：W2(Swish(W1x)⊙W3x)，隐层约 8/3·d。<\/p>"},{"id":6,"s":"速查","c":"基础结构","q":"为什么 Decoder-only 成为主流？","ah":"<p>CLM 每token都有损失、scaling 涌现、KV cache 推理友好。<\/p>"},{"id":7,"s":"速查","c":"基础结构","q":"KV cache 存什么、多大？","ah":"<p>存历史 K/V；2×层数×kv头×头维×序列长×精度字节，7B 约 0.5MB/token。<\/p>"},{"id":8,"s":"速查","c":"基础结构","q":"GQA/MQA/MLA？","ah":"<p>共享/压缩 KV head 减 cache；MLA 低秩隐向量压缩约 90%。<\/p>"},{"id":9,"s":"速查","c":"Tokenizer/预训练","q":"BPE 原理？","ah":"<p>迭代合并最高频相邻 pair；byte-level 无 OOV。<\/p>"},{"id":10,"s":"速查","c":"Tokenizer/预训练","q":"词表越大越好吗？","ah":"<p>不是；压缩率 vs embedding 参数与低频训练不足。<\/p>"},{"id":11,"s":"速查","c":"Tokenizer/预训练","q":"Chinchilla 结论？","ah":"<p>计算最优 tokens≈20×参数；实际为省推理成本常过度训练。<\/p>"},{"id":12,"s":"速查","c":"Tokenizer/预训练","q":"ZeRO 三阶段？","ah":"<p>切优化器状态 / +梯度 / +参数，阶段3≈FSDP。<\/p>"},{"id":13,"s":"速查","c":"Tokenizer/预训练","q":"TP 和 PP 通信差别？","ah":"<p>TP 每层两次 all-reduce 通信重放节点内；PP 只传 stage 边界激活，有 bubble (p−1)/(m+p−1)。<\/p>"},{"id":14,"s":"速查","c":"Tokenizer/预训练","q":"为什么混合精度要 fp32 master 权重？","ah":"<p>fp16 累加更新误差大、可能不更新。<\/p>"},{"id":15,"s":"速查","c":"Tokenizer/预训练","q":"bf16 vs fp16？","ah":"<p>bf16 指数位同 fp32、无需 loss scaling，训练更稳。<\/p>"},{"id":16,"s":"速查","c":"Tokenizer/预训练","q":"loss spike 怎么处理？","ah":"<p>回滚 checkpoint 跳过、查数据、grad clip、warmup。<\/p>"},{"id":17,"s":"速查","c":"Tokenizer/预训练","q":"MoE 为什么需要负载均衡？","ah":"<p>防 router 塌缩到少数 expert。<\/p>"},{"id":18,"s":"速查","c":"微调对齐","q":"LoRA 为什么有效？","ah":"<p>微调更新低秩；A 高斯 B 零初始化保证起点等价；可 merge 零推理开销。<\/p>"},{"id":19,"s":"速查","c":"微调对齐","q":"QLoRA 三个技术？","ah":"<p>NF4、双重量化、paged optimizer。<\/p>"},{"id":20,"s":"速查","c":"微调对齐","q":"RLHF 三阶段？","ah":"<p>SFT → RM(BT 模型成对偏好) → PPO。<\/p>"},{"id":21,"s":"速查","c":"微调对齐","q":"PPO 里 KL 惩罚干嘛的？","ah":"<p>约束策略不偏离 SFT/ref，防 reward hacking 和语言退化。<\/p>"},{"id":22,"s":"速查","c":"微调对齐","q":"PPO 需要哪 4 个模型？","ah":"<p>actor、critic、ref、RM（显存大 → GRPO/DPO 动机）。<\/p>"},{"id":23,"s":"速查","c":"微调对齐","q":"DPO 损失怎么来的？","ah":"<p>KL 约束 RLHF 闭式解反解奖励代入 Bradley-Terry。<\/p>"},{"id":24,"s":"速查","c":"微调对齐","q":"DPO vs PPO？","ah":"<p>离线无 RM vs 在线有 RM；DPO 简单稳定但样本效率低。<\/p>"},{"id":25,"s":"速查","c":"微调对齐","q":"GRPO 改进点？","ah":"<p>组内采样归一化当优势，去掉 critic。<\/p>"},{"id":26,"s":"速查","c":"微调对齐","q":"R1 训练流程？","ah":"<p>cold-start SFT → 推理 RL(RLVR) → 拒绝采样 SFT → 全场景 RL。<\/p>"},{"id":27,"s":"速查","c":"微调对齐","q":"灾难性遗忘怎么缓解？","ah":"<p>混通用数据、小 lr、少 epoch、LoRA。<\/p>"},{"id":28,"s":"速查","c":"推理部署","q":"temperature/top-p 含义？","ah":"<p>softmax 温度；核采样按累计概率截断。<\/p>"},{"id":29,"s":"速查","c":"推理部署","q":"为什么对话不用 beam search？","ah":"<p>产出通用平淡文本且贵。<\/p>"},{"id":30,"s":"速查","c":"推理部署","q":"prefill 和 decode 各是什么瓶颈？","ah":"<p>prefill 计算瓶颈定 TTFT；decode 带宽瓶颈定 TPOT。<\/p>"},{"id":31,"s":"速查","c":"推理部署","q":"PagedAttention 解决什么？","ah":"<p>KV cache 分页管理，消灭碎片、支持 COW，提高并发吞吐。<\/p>"},{"id":32,"s":"速查","c":"推理部署","q":"Continuous batching？","ah":"<p>迭代级调度，随完随走，吞吐大增。<\/p>"},{"id":33,"s":"速查","c":"推理部署","q":"GPTQ vs AWQ？","ah":"<p>Hessian 误差补偿 vs 激活感知保护显著通道；都是 W4。<\/p>"},{"id":34,"s":"速查","c":"推理部署","q":"量化的核心难点？","ah":"<p>激活离群值 → LLM.int8 分解 / SmoothQuant 迁移。<\/p>"},{"id":35,"s":"速查","c":"推理部署","q":"投机解码为什么无损？","ah":"<p>拒绝采样设计保证输出分布等于目标模型。<\/p>"},{"id":36,"s":"速查","c":"推理部署","q":"投机解码什么时候收益大？","ah":"<p>decode 带宽瓶颈 + 草稿接受率高（代码、模板文本）。<\/p>"},{"id":37,"s":"速查","c":"推理部署","q":"FlashAttention 为什么快？","ah":"<p>分块 + online softmax，不落地 N² 矩阵，IO-aware 且数学精确等价。<\/p>"},{"id":38,"s":"速查","c":"推理部署","q":"长上下文外推？","ah":"<p>PI 线性内插 / NTK 改 base / YaRN 分频段+温度。<\/p>"},{"id":39,"s":"速查","c":"RAG/Agent/其他","q":"RAG 完整链路？","ah":"<p>切分→向量化→检索(混合)→重排→生成带引用→评估(RAGAS)。<\/p>"},{"id":40,"s":"速查","c":"RAG/Agent/其他","q":"检索不准怎么排查？","ah":"<p>embedding 领域匹配、chunk 粒度、query 改写/HyDE、混合检索、rerank、top-k。<\/p>"},{"id":41,"s":"速查","c":"RAG/Agent/其他","q":"双塔 vs cross-encoder？","ah":"<p>双塔可离线索引快用于召回；cross-encoder 精用于重排。<\/p>"},{"id":42,"s":"速查","c":"RAG/Agent/其他","q":"RAG vs 微调？","ah":"<p>RAG 管知识（时效/溯源），微调管能力与风格。<\/p>"},{"id":43,"s":"速查","c":"RAG/Agent/其他","q":"lost in the middle？","ah":"<p>长上下文中间信息利用率低；rerank 后把关键内容放两头。<\/p>"},{"id":44,"s":"速查","c":"RAG/Agent/其他","q":"ReAct？","ah":"<p>Thought-Action-Observation 循环的 agent 范式。<\/p>"},{"id":45,"s":"速查","c":"RAG/Agent/其他","q":"MCP 是什么？","ah":"<p>标准化模型与工具/资源连接的开放协议。<\/p>"},{"id":46,"s":"速查","c":"RAG/Agent/其他","q":"幻觉怎么缓解？","ah":"<p>RAG+引用、自一致性、CoV、学会拒答、事实性奖励。<\/p>"},{"id":47,"s":"速查","c":"RAG/Agent/其他","q":"LLM-as-judge 有什么偏差？","ah":"<p>位置、长度、自我偏好；用换位+rubric+参考答案缓解。<\/p>"},{"id":48,"s":"速查","c":"RAG/Agent/其他","q":"怎么发现数据污染？","ah":"<p>n-gram 重叠检测、动态评测集、人工 Arena。<\/p>"},{"id":49,"s":"速查","c":"RAG/Agent/其他","q":"CLIP 原理？","ah":"<p>图文双塔对比学习，zero-shot 分类；LLaVA=MLP 投影，BLIP-2=Q-Former 压缩视觉 token。<\/p>"},{"id":50,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"请详细解释 Transformer 中的自注意力机制如何工作？为什么比 RNN 更适合处理长序列？","ah":"<p>先用上面的三步讲清计算流程，再从三个维度对比 RNN：①长程依赖——注意力任意两位置路径长度 O(1)，RNN 要逐步传递 O(T)，信息易衰减；②并行性——注意力整段可并行计算，RNN 必须串行；③可解释的聚合方式——注意力权重显式表达\"看哪里\"。最后补一句代价：O(T²) 复杂度，所以才有 FlashAttention、稀疏注意力这些后续优化。<\/p>"},{"id":51,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"什么是位置编码？为什么必需？列举至少两种实现。","ah":"<p>注意力本身是\"置换不变\"的——打乱输入顺序输出不变，因此必须注入位置信息。实现：①正弦位置编码（不同频率 sin/cos，可线性近似相对位置，免训练）；②可学习绝对位置（BERT/GPT-2，简单但外推差）；③RoPE（旋转位置编码，主流）；④ALiBi（注意力分数加线性距离惩罚，外推好）。<\/p>"},{"id":52,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"详细介绍 RoPE，对比绝对位置编码它的优劣势。","ah":"<ul>\n<li><strong>原理<\/strong>：把 q、k 每两个维度分成一对，在第 m 个位置对 q 施加角度 m·θ_i 的旋转（θ_i = 10000^(−2i/d)，i 为维度对序号，不同维度对不同频率）。关键性质：旋转后 ⟨R(m)q, R(n)k⟩ 的内积只依赖 <strong>m−n<\/strong>——实现上是绝对位置编码，效果上是相对位置编码。<\/li>\n<li><strong>对比绝对位置编码的优势<\/strong>：天然表达相对距离，外推/插值更友好（配合 PI/NTK/YaRN 可扩展到更长上下文）；不引入额外参数；与线性注意力兼容。<\/li>\n<li><strong>劣势<\/strong>：实现稍复杂（要改 Q/K 投影后的处理）；直接外推到远超训练长度仍会掉点，需要插值或微调。<\/li>\n<\/ul>"},{"id":53,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"MHA、MQA、GQA 的区别？","ah":"<p>三者的 Q 头都一样，区别在 KV 头的数量与组织方式——MHA 每个头独立一组 KV（质量最好，KV cache 最大）；MQA 所有 Q 头共享一组 KV（cache 缩到 1/h，但质量有损）；GQA 分组共享（如 32 个 Q 头分 8 组），是两者折中，LLaMA-3、Qwen2 均采用。再加分：DeepSeek 的 <strong>MLA<\/strong> 走另一条路——把 KV 低秩压缩成隐向量只缓存它，cache 减约 90% 且质量接近 MHA。<\/p>"},{"id":54,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"比较 Encoder-Only / Decoder-Only / Encoder-Decoder，各自擅长什么？","ah":"<p>Encoder-Only（BERT）双向注意力，擅长理解类任务（分类、检索、rerank）；Decoder-Only 单向 + KV cache，主流生成式大模型的选择（理由见真题 6）；Encoder-Decoder（T5/BART）条件生成任务（翻译、摘要）表达最干净，但训练效率低、架构复杂。为什么现在主流是 Decoder-only：①CLM 目标下每个 token 都产生损失，训练信号利用率高；②GPT-3 证明 zero-shot/few-shot 能力随规模涌现，scaling 友好；③单流生成与 KV cache 天然契合，推理实现简单；④所有任务统一成\"续写\"。<\/p>"},{"id":55,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"你知道哪些 LLM 常用激活函数？为什么选它？","ah":"<p>ReLU → GELU（BERT/GPT-2，平滑版 ReLU，处处可导且有小负值区间，实验效果更好）→ <strong>SwiGLU<\/strong>（LLaMA/Qwen 现标配）：<code>FFN(x) = W2( Swish(W1x) ⊙ W3x )<\/code>，门控让网络自己学习信息通过的比例；为保持参数量不变，隐层取约 8/3·d（d=4096 → 11008）。<\/p>"},{"id":56,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"如何理解\"涌现能力\"？通常在什么规模出现？","ah":"<p>涌现指小模型上几乎没有、规模跨过某个阈值后突然出现的能力（如 ICL 少样本学习、CoT 多步推理）。常见解释有两派：①真实相变，任务需要多步正确组合，单步成功率提升在多步任务上呈指数放大；②度量假象——不连续指标（exact match）造成的人为跳变，换成连续指标后能力平滑增长。规模上没有统一定论，一般说 10B～百亿到千亿级（GPT-3 175B 显现 ICL）。回答时给两派观点，展示你了解争议。<\/p>"},{"id":57,"s":"真题","c":"第 1 章 Transformer 与模型结构","q":"NLP 和 LLM 最大的区别是什么？","ah":"<p>（开放题，给框架）：范式上从\"任务专属模型\"（每个任务标注数据 + 微调 BERT）变成\"通用基座 + 提示/对齐\"（一个模型 + 指令解决所有任务）；能力上从\"表示学习\"到\"世界知识 + 推理 + 指令遵循\"；工程上从训练小模型变成数据工程 + 对齐 + 推理服务。共同点：底座仍是语言建模与 Transformer。<\/p>"},{"id":58,"s":"真题","c":"第 2 章 Tokenizer 与词表","q":"比较 BPE 和 WordPiece。","ah":"<p>都是自底向上的合并算法，区别在<strong>合并的标准<\/strong>：BPE 按频率（合并最高频 pair，统计驱动、简单高效）；WordPiece 按互信息/似然增益（合并后对语言模型似然提升最大的 pair，更\"概率\"导向）。工程上：GPT/LLaMA 用 byte-level BPE，BERT 用 WordPiece，SentencePiece 是把两者（含 Unigram）包起来的语言无关实现。<\/p>"},{"id":59,"s":"真题","c":"第 3 章 预训练与训练工程","q":"Scaling Laws 揭示了什么关系？对研发有什么指导意义？","ah":"<p>loss 与参数量 N、数据量 D、算力 C 呈幂律关系 <code>L ∝ N^−α · D^−β · C^−γ<\/code>。指导意义三层：①给定算力预算，可以<strong>提前外推<\/strong>训练效果（用小模型拟合曲线预测大模型 loss），降低大模型赌错的风险；②Chinchilla 给出计算最优的 N:D ≈ 1:20 配比；③实际还要考虑推理成本——部署量大的场景会偏离计算最优、过度训练小模型。这一问能体现\"研究 → 工程\"的转化思维。<\/p>"},{"id":60,"s":"真题","c":"第 3 章 预训练与训练工程","q":"MoE 如何在不显著增加推理成本的情况下扩大参数规模？","ah":"<p>核心是<strong>稀疏激活<\/strong>——总参数变大（专家变多）但每个 token 只路由到 top-k（1~2）个专家，FLOPs 只与激活参数有关。配套三件事：①负载均衡损失防止路由塌缩；②expert parallel 把专家切到不同卡（all-to-all 通信）；③共享专家/细粒度专家（DeepSeek-V3）提升参数效率。代价：显存占用大、训练路由不稳、通信开销。<\/p>"},{"id":61,"s":"真题","c":"第 3 章 预训练与训练工程","q":"训练百/千亿参数级 LLM 会面临哪些工程和算法挑战？","ah":"<p>（结构化回答模板，这题就是考框架感）：\n1. <strong>显存<\/strong>：参数+梯度+优化器状态约 16 字节/参数，7B 训练就要 112 GB → ZeRO/TP/PP/激活重计算。\n2. <strong>算力与并行<\/strong>：单次训练 10²² FLOPs 级，必须 3D 并行 + 高 MFU；通信与计算重叠。\n3. <strong>稳定性<\/strong>：loss spike（脏数据/数值溢出）→ 梯度裁剪、warmup、回滚恢复策略。\n4. <strong>数据<\/strong>：TB 级清洗去重管线、配比实验、评测去污染。\n5. <strong>算法<\/strong>：scaling 曲线预测、超参迁移（小模型调参外推大模型）、数据课程。\n6. <strong>评测<\/strong>：训练中持续评测 + 能力基准，避免训完才发现问题。<\/p>"},{"id":62,"s":"真题","c":"第 3 章 预训练与训练工程","q":"Qwen/DeepSeek 的创新点主要在哪？","ah":"<p>（挑熟的展开）：DeepSeek-V3：<strong>MLA<\/strong>（KV 低秩压缩）、<strong>细粒度 MoE + 共享专家<\/strong>、<strong>MTP<\/strong> 多 token 预测目标（训练信号更密 + 推理可用投机解码）、<strong>FP8 混合精度训练<\/strong>（大规模验证可行）、无辅助损失的负载均衡；R1：纯 RLVR 涌现长 CoT 与反思。Qwen：多语言词表与数据、GQA + 长上下文扩展（YaRN 系）、从 dense 到 MoE 的系列化。答这题的诀窍：<strong>每个创新点都答\"解决什么问题\"<\/strong>，比如 MLA 是为了解决 KV cache 显存瓶颈。<\/p>"},{"id":63,"s":"真题","c":"第 4 章 SFT 与参数高效微调（LoRA 专题）","q":"LoRA 为什么能加速训练、省显存？","ah":"<p>省显存——可训练参数从 100% 降到 &lt;1%，优化器状态（Adam 的 m、v 是参数量的 2 倍）和梯度只对 LoRA 参数分配；加速——反向传播计算量大减（不需要给全部权重算梯度），且可冻结的基座权重可以量化存储（QLoRA）；同时 optimizer step 也变快。注意辨析：<strong>前向计算量没有减少<\/strong>（还是要过基座），省的是梯度和优化器。<\/p>"},{"id":64,"s":"真题","c":"第 4 章 SFT 与参数高效微调（LoRA 专题）","q":"LoRA 的秩 r 怎么选？作用在哪些层？","ah":"<p>r=8～64 常见。任务与基座能力差距小（对话风格）r=8 够；领域差距大（专业代码、小语种）加大到 32–64，再大收益递减。α 通常取 r 或 2r（有效缩放 α/r）。作用层：q/k/v/o 投影是标配，实验表明 <strong>加上 MLP 层（up/down/gate）通常更好<\/strong>；不建议作用于 embedding 和 lm_head（词表大、参数多，性价比低，且动 embedding 容易破坏词向量空间）。<\/p>"},{"id":65,"s":"真题","c":"第 4 章 SFT 与参数高效微调（LoRA 专题）","q":"什么场景选 LoRA，什么场景必须全参微调？","ah":"<p>LoRA 适合——领域与基座分布接近、算力有限、需要多任务多租户（一个基座挂多个 LoRA 热切换）、后期要 merge 无损部署。全参适合——领域差距大、数据量大（百万级以上）、追求极致效果（对齐训练、继续预训练）。中间态：LoRA + 更高 rank + 更多目标层 ≈ 接近全参效果。<\/p>"},{"id":66,"s":"真题","c":"第 4 章 SFT 与参数高效微调（LoRA 专题）","q":"QLoRA 为什么要用 NF4？为什么 4-bit 权重还能训练？","ah":"<p>NF4（NormalFloat4）是针对<strong>正态分布权重<\/strong>设计的信息论最优量化码本——预训练权重大致服从零均值正态，NF4 的分位点使每个 4-bit 码均匀覆盖分布的分位数，比均匀 INT4 量化误差更小。能训练：4-bit 权重只存基座（冻结），反传时<strong>按需反量化到 bf16 参与矩阵乘<\/strong>，梯度只流向 LoRA 的 bf16 参数，所以精度可控。<\/p>"},{"id":67,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"与 SFT 相比，RLHF 旨在解决什么？为什么 SFT 不够？","ah":"<p>SFT 是\"模仿\"——只能学到演示数据中出现过的行为，无法表达\"这个回答比那个好\"的<strong>偏好序<\/strong>，且人类很难写出\"完美的示范\"（会写好答案，但难以枚举所有坏情况）。RLHF 直接优化偏好，能：①压掉 SFT 模型的低质量输出模式；②对齐人类主观偏好（语气、格式、安全性）；③在\"好/更好\"这种细粒度上超越示范数据的天花板。一句话：<strong>SFT 教\"什么是对的\"，RLHF 教\"什么更好\"<\/strong>。<\/p>"},{"id":68,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"为什么 RM 用成对比较而不是绝对打分？","ah":"<p>绝对分数存在<strong>标注者间/标注者内不一致<\/strong>（不同人对 7 分标准不同、同一人前后不一致），而\"A 比 B 好\"的相对判断稳定得多、标注成本低、也更容易区分接近的回答。劣势：①成对数据只提供序关系，奖励的绝对尺度不可比；②数据量需求更大（组合爆炸）；③存在标注者偏好噪声（偏爱长回答/自信语气）会进 RM。<\/p>"},{"id":69,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"为什么用 PPO 而不是 REINFORCE 或 Q-learning？KL 惩罚起什么作用？","ah":"<p>REINFORCE 方差大、样本效率低、无 clip 保护；Q-learning 系（值函数方法）在动作空间为整段文本（序列级、维度爆炸）时不可行。PPO 是 on-policy 策略梯度 + importance sampling 复用一批数据多次更新 + clip 限制步长，在\"序列生成\"这种高方差场景稳定。<strong>KL 惩罚<\/strong>把策略拴在 ref（SFT）附近：①防 reward hacking（RM 只是人类偏好的有损代理，拉太远必钻空子）；②防语言能力退化（乱码、重复、外语夹杂）；③让训练信号集中在\"改变什么\"而不用重学语言基础。<\/p>"},{"id":70,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"β 过大或过小分别会怎样？","ah":"<p>β 过大 → 策略被锁死在 SFT 附近，奖励提升不动，RLHF 学不到东西（趋近于 SFT 模型）；β 过小 → 策略自由探索 → reward hacking、语言退化、KL 爆炸。调法：监控 KL 曲线（常见目标维持在一个 token 平均几 nats），KL 超限则加大 β 或提前停；也有自适应 KL 控制器（KL 高于目标就升 β）。<\/p>"},{"id":71,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"什么是 reward hacking？举一个具体例子和缓解策略。","ah":"<p>RM 只是人类偏好的代理模型，策略会优化\"代理分\"而非\"人类真实偏好\"。例子：RM 偏好长回答 → 模型学会写又长又空的废话；RM 偏好礼貌 → 模型堆砌\"非常好的问题！\"；代码 RM 偏好编译通过 → 模型写 <code>pass<\/code> 空壳。缓解：KL 约束、RM 定期用新标注更新（对抗迭代）、奖励归一化/长度惩罚、多 RM 集成或 debated RM、最终靠人类评估兜底。<\/p>"},{"id":72,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"DPO 的核心思想？与 PPO 的主要区别和优劣？","ah":"<p>见 5.1 推导，核心是<strong>把奖励学习与策略优化合并成对偏好对的直接分类问题<\/strong>（隐式奖励 = β·log π/π_ref）。优点：无 RM 无采样，实现简单、稳定、省显存。缺点：<strong>离线<\/strong>——无法根据当前策略生成新数据探索，对数据分布敏感，样本效率低；推理类任务上普遍弱于调好的在线 RL。一句话总结：DPO 是\"便宜、稳、上限低\"，PPO/GRPO 是\"贵、难调、上限高\"。<\/p>"},{"id":73,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"GRPO 和 PPO 的区别？优劣？","ah":"<p>优势估计的来源不同——PPO 用学出来的 value network + GAE；GRPO 对每个 prompt 采样一组（如 8 个）回答，用<strong>组内奖励的归一化值<\/strong>当优势，critic 整个删掉。优点：省一半训练显存、超参少、天然适配\"有标准答案可自动打分\"的 RLVR 场景。缺点：每个 prompt 要采样一组（推理开销大）；优势质量依赖组内奖励区分度（全对/全错组无梯度）；相对 PPO 少了 value 的低方差估计，某些场景更抖。<\/p>"},{"id":74,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"GSPO / DAPO 听说过吗？与 GRPO 什么区别？","ah":"<p>（一句话级别即可，说清动机）：都是对 GRPO 类算法的稳定性改进。<strong>GSPO<\/strong>（Qwen 团队）：把 importance ratio 从 token 级改成<strong>序列级<\/strong>再裁剪——MoE 训练中 token 级 ratio 噪声大、易训崩，序列级更稳。<strong>DAPO<\/strong>（字节）：四个改动——clip-higher（放宽上界裁剪鼓励探索）、动态采样（过滤全对/全错的无效组）、token 级损失归一化、超长样本奖励整形；核心都是提升 RLVR 训练的探索效率与稳定性。答不出来也没关系，坦白\"了解动机、没读过细节\"好过硬编。<\/p>"},{"id":75,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"RLHF 后离线评估很好，上线后回答模式化、奉承、缺乏信息量，可能原因和解决思路？","ah":"<p>（排查型问题，按层答）：①<strong>RM 过拟合标注偏好<\/strong>——标注者偏爱长/客气/确定语气 → 模型放大这些特征（sycophancy）。解法：偏好标注去噪、RM 更新、加长度惩罚。②<strong>KL 太小或奖励尺度问题<\/strong> → 策略钻空子。③<strong>离线评估集与线上分布不一致<\/strong>——评测题模式固定，模型只会答\"考题\"。解法：动态评测集、线上 A/B + 用户信号。④<strong>SFT 数据模式化<\/strong>本身如此，RLHF 放大。系统性方案：bad case 收集回流 → 数据飞轮。<\/p>"},{"id":76,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"如何解决信用分配问题？token 级和序列级奖励有何不同？","ah":"<p>序列级奖励（ORM：答案对错）无法指出\"哪几步导致错误\"——长 CoT 中噪声大；token/步级信用分配方法：①<strong>PRM 过程奖励模型<\/strong>对每个推理步打分；②GAE 用 value function 折扣回传（PPO）；③GRPO 用序列级优势均摊到所有 token（粗糙但免 critic）。趋势：推理模型用 RLVR + 组相对优势，牺牲步级精度换取可扩展性；PRM 用于筛选数据和验证。<\/p>"},{"id":77,"s":"真题","c":"第 5 章 对齐：RLHF / DPO / GRPO","q":"谈谈对 RLAIF 的理解，潜力和风险？","ah":"<p>用 LLM 代替人类标注偏好（Anthropic 的 Constitutional AI 是代表）。潜力：标注成本降 1–2 个数量级、可大规模生成、标准一致。风险：judge 模型自身的偏见被系统性继承（自我偏好、长度偏好）、模型\"近亲繁殖\"导致多样性下降、价值对齐取决于 constitution 本身的质量。实践常\"AI 初筛 + 人工抽检\"混合。<\/p>"},{"id":78,"s":"真题","c":"第 6 章 推理与部署","q":"解释 Greedy / Beam Search / Top-K / Top-P 的原理和优缺点。","ah":"<p>Greedy 每步取最大——快、确定，但易重复、呆板；Beam Search 维护 k 条候选序列——适合翻译/摘要等有明确答案的任务，<strong>开放式对话中产出通用、平淡、高概率的\"安全话\"<\/strong>，且贵；Top-K 每步只在概率前 k 里采样——k 固定不自适应（有时前 5 个词占 95%，有时前 500 才到）；Top-P（nucleus）取累计概率达 p 的最小候选集——候选数随分布自适应，是对话生成默认。工程配套：temperature 控制分布锐度，repetition/frequency/presence penalty 压重复。<\/p>"},{"id":79,"s":"真题","c":"第 6 章 推理与部署","q":"KV Cache 为什么能加速？显存怎么算？有什么压缩手段？","ah":"<p>能加速的原因——自回归生成时历史 token 的 K/V 不变，缓存后每步只算新 token 的 q 与\"缓存 K/V + 新 K/V\"的注意力，把每步 O(T²·d) 降为 O(T·d)。大小公式 + 7B 例子（0.5 MB/token，4k 上下文 2 GB/请求）。压缩四条路：①结构上 GQA/MQA/MLA（少存 KV 头或压缩到隐向量）；②数值上 KV 量化（FP8/INT4）；③算法上淘汰/合并（H2O、SnapKV，只留重要 token）；④系统上 PagedAttention 分页 + prefix cache 跨请求复用。<\/p>"},{"id":80,"s":"真题","c":"第 6 章 推理与部署","q":"为什么推理加速常用\"权重 INT4 量化\"，而激活量化更难？","ah":"<p>LLM 激活存在系统性离群值——少数通道幅值比其他大几个数量级，INT8 线性量化直接被这些离群值撑爆 scale，其余通道精度崩掉。解法：LLM.int8 把 outlier 通道拆出用 fp16；SmoothQuant 用等效缩放把 outlier 从激活搬到权重（权重没有这种极端离群）；或干脆只量化权重（W4A16），激活保持 fp16——这是当前主流。AWQ 进一步发现只需保护约 1% 的显著权重通道，用激活分布指导缩放。<\/p>"},{"id":81,"s":"真题","c":"第 6 章 推理与部署","q":"投机解码为什么能保证输出分布不变？什么时候收益最大？","ah":"<p>接受概率 min(1, p(x)/q(x))，拒绝时从<strong>残差分布 max(p−q, 0) 归一化后重采样<\/strong>——数学上可证明这等价于直接从目标分布 p 采样（这是拒绝采样的标准结论），所以无损。收益条件：①decode 是带宽瓶颈（小 batch 才明显，batch 很大时 GPU 已算满，收益趋零）；②草稿接受率高（草稿与目标分布接近、任务模式性强，如代码）；③草稿模型足够小（通常 1/10 大小）。<\/p>"},{"id":82,"s":"真题","c":"第 6 章 推理与部署","q":"线上服务 QPS 突增、TTFT 毛刺，怎么排查优化？","ah":"<p>（系统题模板）：先看监控分层定位——请求排队（batch 满）→ prefill 排队（长 prompt）→ KV 显存不足触发抢占/换页。优化清单：prefix caching 复用 system prompt；chunked prefill 让长请求不被整段独占；调大 max_num_seqs/KV block；显存不够上 KV 量化或加卡；超长上下文请求限流；SLO 分级（对话类保 TPOT、批处理类保吞吐）。<\/p>"},{"id":83,"s":"真题","c":"第 7 章 RAG","q":"什么是 RAG？解决了大模型哪些痛点？","ah":"<p>不要只答\"检索+生成\"。答三层：①定义——生成前先从外部知识库检索相关内容，让模型\"开卷考试\"；②三大痛点——知识时效性（训练截止日期）、幻觉（答案可溯源到引用）、私有数据（模型没见过的企业内部知识）；③加分——演进路线 Naive → Advanced（重排/混合检索）→ Modular → Graph → Agentic RAG。<\/p>"},{"id":84,"s":"真题","c":"第 7 章 RAG","q":"RAG 和微调怎么选？","ah":"<p>先给判断标准再给组合：知识频繁更新/需溯源/预算有限 → RAG；领域风格与行为深度适配/低延迟/输出格式严格 → SFT。<strong>生产最佳实践是组合<\/strong>——SFT 教模型\"怎么答\"（风格、引用格式），RAG 供\"答什么\"（实时知识）。<\/p>"},{"id":85,"s":"真题","c":"第 7 章 RAG","q":"完整流程？","ah":"<p>索引阶段 + 查询阶段两段讲（见 7.1），每个环节能多说一句技术选型。<\/p>"},{"id":86,"s":"真题","c":"第 7 章 RAG","q":"Chunk 大小和 Overlap 怎么定？","ah":"<p>不是拍脑袋：chunk 太小 → 语义被切断、检索到的片段缺上下文；太大 → 噪声多、embedding 语义稀释、prompt 变贵。经验值 512–1024 token、overlap 10–20%，<strong>最终靠评测集 A/B 定<\/strong>——这句话是关键，体现工程素养。<\/p>"},{"id":87,"s":"真题","c":"第 7 章 RAG","q":"如何提升检索准确率（至少三种）？","ah":"<p>混合检索（BM25+dense，RRF 融合）、查询重写/多查询/HyDE、Rerank 精排、元数据过滤、微调 embedding 模型（领域数据对比学习）、Parent-Child 切分。能说\"先分析 bad case 是召回问题还是排序问题，再对症下药\"是亮点。<\/p>"},{"id":88,"s":"真题","c":"第 7 章 RAG","q":"如何评估 RAG 系统？","ah":"<p>分两层：检索层 recall@k / MRR / nDCG（需要标注 golden chunk）；生成层 <strong>RAGAS 三元组<\/strong>——忠实度（答案是否忠于上下文）、答案相关性、上下文召回率。端到端再配人工评估 + 线上用户反馈。这题答不出来基本暴露没做过 RAG。<\/p>"},{"id":89,"s":"真题","c":"第 7 章 RAG","q":"RAG 常见问题及解决方案？","ah":"<p>准备 3–4 个能讲深的：内容缺失（知识库没覆盖 → 补数据/触发兜底话术）、召回了但排后面（rerank）、表格/SQL 弱（表格单独抽取+text-to-SQL 混合架构）、复杂 PDF 解析乱（版面模型+OCR）、多跳问题（分解查询/GraphRAG）。<\/p>"},{"id":90,"s":"真题","c":"第 7 章 RAG","q":"什么是 Self-RAG 和 CRAG？","ah":"<p>Self-RAG：模型生成反思 token，自己决定要不要检索、评价检索结果与答案质量；CRAG：加检索质量评估器，不合格时改写查询并触发 web 搜索兜底。适用于金融/医疗等高可靠场景。一句话总结：<strong>从\"总是检索\"进化到\"按需检索 + 检索质量把关\"<\/strong>。<\/p>"},{"id":91,"s":"真题","c":"第 7 章 RAG","q":"GraphRAG 与传统 RAG 的区别？","ah":"<p>传统 RAG 用向量相似度召回片段，适合\"局部事实\"问题；GraphRAG 先抽实体关系建知识图谱，做图遍历 + 社区摘要，解决<strong>多跳关系推理<\/strong>（\"A 公司和 C 公司有什么共同供应商\"）和<strong>全局性问题<\/strong>（\"这批文档的主要主题\"）。代价：建图与更新成本高。<\/p>"},{"id":92,"s":"真题","c":"第 7 章 RAG","q":"了解搜索系统吗？和 RAG 有什么区别？","ah":"<p>搜索系统核心是\"排序好的文档列表\"（召回+排序+展示），RAG 是\"把检索结果作为上下文生成答案\"。技术栈高度重叠（召回/排序思想互通），差异在：RAG 关注上下文构造（放哪些、放前放后）、忠实性、引用；搜索关注点击率、多样性。加分：能聊 learning to rank、行为数据训练排序模型。<\/p>"},{"id":93,"s":"真题","c":"第 8 章 Agent","q":"如何定义一个基于 LLM 的智能体？核心组件？","ah":"<p>能<strong>感知环境、自主决策、调用工具、迭代完成目标<\/strong>的系统。组件四件套：LLM 推理核、工具集（function calling/代码执行/检索）、记忆（短期上下文+长期存储）、规划与反思机制。可以补一句工程视角：生产里 Agent 系统的大部分代码其实是\"工具注册、状态管理、错误恢复\"，模型只占循环中枢。<\/p>"},{"id":94,"s":"真题","c":"第 8 章 Agent","q":"ReAct 是如何结合思维链和行动的？","ah":"<p>交替生成\"推理轨迹\"与\"环境动作\"——推理让模型总结现状、修正计划（人类\"内心独白\"的外化），行动获取新信息反哺推理；相比纯 CoT 优点是能<strong>根据环境反馈动态调整<\/strong>，缓解幻觉（事实来自 Observation 而非参数记忆）。变体：ReAct+function calling 的工程实现（结构化输出替代自由文本）。<\/p>"},{"id":95,"s":"真题","c":"第 8 章 Agent","q":"Function Calling 是怎么让 LLM 学会调用工具的？","ah":"<p>三层：①推理时——工具 schema 注入 prompt，模型按训练过的格式输出 JSON 调用，执行结果回填继续推理；②训练时——用\"工具调用轨迹数据\"做 SFT（甚至 RL），让模型学会\"何时调用、怎么填参、怎么用结果\"；③工程上——参数校验、超时重试、权限控制都在框架层兜底。追问\"模型怎么知道该调哪个工具\"：依赖工具 description 的语义匹配质量，所以工具描述本身就是 prompt 工程。<\/p>"},{"id":96,"s":"真题","c":"第 8 章 Agent","q":"构建复杂 Agent 最大的挑战是什么？（开放题）","ah":"<p>（选两三个能讲深的）：①<strong>误差累积<\/strong>——多步任务每步 95% 正确率，20 步后只剩 36%；缓解：检查点回滚、子任务验证、更可靠的结构化输出。②<strong>评测困难<\/strong>——路径不唯一、环境非确定，难回归。③<strong>成本与延迟<\/strong>——循环调用 token 翻倍。④<strong>长上下文管理<\/strong>——历史膨胀。给一个\"我们怎么解决\"的例子最有说服力（见第 11 章 Agent 项目）。<\/p>"},{"id":97,"s":"真题","c":"第 8 章 Agent","q":"多智能体系统相比单 Agent 的优势与代价？","ah":"<p>优势——职责分离降低单上下文复杂度、并行加速、角色对抗提升质量（辩论式核查）。代价——通信 token 成本倍增、误差级联、编排复杂度。实用观点（面试官爱听）：<strong>能单 Agent 解决就不上多 Agent<\/strong>，多 Agent 的合理场景是任务天然可分解并行（如多文档分析）或需要对抗校验。<\/p>"},{"id":98,"s":"真题","c":"第 8 章 Agent","q":"用过哪些 Agent 框架？选型怎么选？评价指标是什么？","ah":"<p>模板：LangChain/LangGraph（生态全、编排状态机强）、LlamaIndex（数据/RAG 侧重）、AutoGen/CrewAI（多角色协作）。选型逻辑：生产稳定性和可控性 &gt; 功能多——所以复杂生产系统倾向 LangGraph 式显式状态机而非自由循环。评价指标：任务成功率、步数/token 成本、时延、工具调用准确率、人工干预率。没深度用过的只说你真用过的，别背名词。<\/p>"},{"id":99,"s":"真题","c":"第 8 章 Agent","q":"微调过 Agent 能力吗？数据怎么收集？","ah":"<p>思路：工具调用微调数据 = 任务描述 + 正确的工具调用轨迹。来源：①人工标注轨迹；②强模型蒸馏（让 GPT-4 级模型跑任务，成功的轨迹留下）；③<strong>拒绝采样<\/strong>——模型自己采 N 条，按最终结果对错筛选；④失败轨迹也要（负样本，教模型从工具报错中恢复）。<\/p>"},{"id":100,"s":"真题","c":"第 9 章 评测、幻觉与安全","q":"为什么 BLEU/ROUGE 评估现代 LLM 有很大局限？","ah":"<p>它们基于 n-gram 与参考答案的字面重叠——但同一意思有无穷种表达（\"很好\"≈\"非常棒\"≈\"太赞了\"），重叠低不代表差；对开放式回答、多轮对话、推理过程完全失效；还偏爱短/模板化输出。现代做法：任务可验证的用规则/测试（代码跑单测、数学对答案），开放任务用 LLM-as-judge + 人工抽检。<\/p>"},{"id":101,"s":"真题","c":"第 9 章 评测、幻觉与安全","q":"什么是 LLM-as-a-Judge？有哪些偏见？","ah":"<p>用强模型按 rubric 给回答打分/比较。优点：可扩展、便宜、能评开放式输出。偏见四个：<strong>位置偏差<\/strong>（偏爱先出现的）、<strong>长度偏差<\/strong>（偏爱长的）、<strong>自我偏好<\/strong>（偏爱自己生成的）、<strong>能力天花板<\/strong>（区分不出两个都很强的回答）。缓解：交换位置取平均、配参考答案、详细 rubric、多 judge 投票、定期与人工标注对齐校准。<\/p>"},{"id":102,"s":"真题","c":"第 9 章 评测、幻觉与安全","q":"为什么评估 Agent 比评估 LLM 更难？","ah":"<p>①路径不唯一（同一任务多条成功路径，过程无法 exact match）；②环境非确定（工具返回会变）；③评估维度多——结果正确性之外还有步数/成本/安全性/恢复能力（过程指标）；④需要真实或仿真环境（WebArena、OSWorld、SWE-bench 搭环境跑）。所以 Agent 评测 = 结果指标 + 过程指标 + 环境构建三件事。<\/p>"},{"id":103,"s":"真题","c":"第 9 章 评测、幻觉与安全","q":"幻觉的成因和缓解？（超高频，答框架）","ah":"<p>先分类——<strong>事实性幻觉<\/strong>（与客观事实不符）vs <strong>忠实性幻觉<\/strong>（与给定上下文不符，如摘要编内容）。成因四条：①本质是概率语言模型，优化\"流利\"而非\"真实\"；②训练数据本身有错；③模型不知道自己知识的边界（校准差），且 RLHF 放大自信/讨好；④采样随机性。缓解按层：数据层（清洗、知识注入）、训练层（RLVR 事实性奖励、教模型拒答、CoV 自检）、推理层（RAG+强制引用、self-consistency、温度调低）、系统层（输出事实核查、引用校验）。能主动说\"幻觉没法根除，只能工程上控制在业务可接受范围\"加分。<\/p>"},{"id":104,"s":"真题","c":"第 9 章 评测、幻觉与安全","q":"红队测试是什么？","ah":"<p>模拟攻击者系统性地找模型漏洞——越狱（角色扮演、编码绕过、对抗后缀 GCG）、诱导有害内容、隐私泄露（训练数据记忆、成员推断）、工具滥用（Agent 场景）。产出是攻击样例集 → 反哺安全训练与过滤器 → 回归测试闭环。<\/p>"},{"id":105,"s":"真题","c":"第 10 章 多模态","q":"多模态大模型的核心挑战是什么？如何实现模态对齐？","ah":"<p>核心是<strong>表示空间对齐<\/strong>——视觉特征（连续、高维、空间结构）与文本 token（离散、序列）分布差异大。方案谱系：轻量投影（LLaVA，靠 LLM 能力兜底）→ 中量压缩（Q-Former/resampler，学习性更强）→ 深度融合（cross-attention 插层，Flamingo）。再加数据视角：对齐靠大规模图文对预训练 + 高质量视觉指令数据微调。<\/p>"},{"id":106,"s":"真题","c":"第 10 章 多模态","q":"LLaVA / MiniGPT-4 如何连接视觉编码器与 LLM？","ah":"<p>视觉塔（CLIP ViT）抽取 patch 特征 → 投影层（LLaVA v1 是一层线性，v1.5 是两层 MLP）映射到 LLM 的 embedding 空间 → 视觉 token 作为\"外语\"与文本 token 拼接输入 LLM。训练两阶段：先冻结视觉塔和 LLM 训投影（图文对数据，学对齐），再做视觉指令微调（GPT-4 生成的对话/推理数据）。卖点：结构简单、成本低、效果好——说明对齐的主要瓶颈在<strong>数据<\/strong>不在结构。<\/p>"},{"id":107,"s":"真题","c":"第 10 章 多模态","q":"什么是视觉指令微调？为什么关键？","ah":"<p>把\"图像 + 指令 + 回答\"格式的数据对 VLM 做 SFT——预训练只教会了\"图文对齐\"，指令微调才教会它\"看图听指令做事\"（描述、推理、问答、OCR）。与纯文本 SFT 的区别：数据要围绕图像内容构造（描述、定位、比较、推理），否则模型会无视图像瞎答。<\/p>"},{"id":108,"s":"真题","c":"第 10 章 多模态","q":"处理视频相比静态图要额外解决什么？","ah":"<p>①token 爆炸——帧数×每帧 token 数，需要帧采样与时空压缩（时序池化）；②时序建模——帧间关系、动作因果（M-RoPE 类的时序位置编码）；③长视频记忆——分段+摘要或流式处理；④数据——视频-文本对稀缺，常用 ASR 字幕弱对齐。<\/p>"},{"id":109,"s":"真题","c":"第 10 章 多模态","q":"VLM 的幻觉与纯文本有何不同？","ah":"<p>VLM 幻觉多了一层\"<strong>看没看见<\/strong>\"的问题——模型会用语言先验脑补图像内容（图里没有的物体说有、答非所图），因为语言先验太强而视觉证据利用不足（CLIP 特征偏全局语义、细粒度差）。典型例子：问\"图里几个人\"，答出语言上更常见的\"两个人\"而不管实际。缓解：高质量定位/OCR 数据、防幻觉微调（RLAIF 判别\"是否忠于图像\"）、让模型显式引用图像区域（grounding）。<\/p>"}];
+const LS='lq_marks_v1', LST='lq_today_v1';
+let marks=new Set(JSON.parse(localStorage.getItem(LS)||'[]'));
+let sess=null;
+const $=id=>document.getElementById(id);
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuffle(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function today(){const d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
+function saveMarks(){localStorage.setItem(LS,JSON.stringify([...marks]))}
+function todayStat(){let t=JSON.parse(localStorage.getItem(LST)||'null');$('today-stat').textContent=(t&&t.date===today())?`今天已练 ${t.n} 题`:''}
+function stat(){const p=filteredPool();$('pool-stat').textContent=`当前题池 ${p.length} 题`;
+let t=JSON.parse(localStorage.getItem(LST)||'null');$('today-stat').textContent=(t&&t.date===today())?`今天已练 ${t.n} 题`:''}
+function refreshCats(){const src=[...document.querySelectorAll('.src:checked')].map(e=>e.value);
+const cnt={};BANK.filter(c=>src.includes(c.s)).forEach(c=>cnt[c.c]=(cnt[c.c]||0)+1);
+$('cats').innerHTML=Object.keys(cnt).sort().map(c=>
+`<label class="chk"><input type="checkbox" class="cat" value="${c.replace(/"/g,'&quot;')}" checked onchange="stat()"> ${c}（${cnt[c]}）</label>`).join('')||'<span class="hint">请先勾选来源</span>';
+stat()}
+function filteredPool(){const src=[...document.querySelectorAll('.src:checked')].map(e=>e.value);
+const cats=[...document.querySelectorAll('.cat:checked')].map(e=>e.value);
+let l=BANK.filter(c=>src.includes(c.s)&&cats.includes(c.c));
+if($('onlymarks').checked)l=l.filter(c=>marks.has(c.id));return l}
+function begin(cards,tag){if(!cards.length){alert('题池为空：换一下筛选条件，或先「标记不会」一些题');return}
+sess={cards,idx:0,shown:false,tag};
+$('p-home').style.display='none';$('p-done').style.display='none';$('p-quiz').style.display='block';render()}
+function todayStart(){const idx=shuffle([...BANK.keys()],rng(today())).slice(0,10);begin(idx.map(i=>BANK[i]),'今日一练')}
+function customStart(){const pool=filteredPool();begin(shuffle(pool.slice(),Math.random),null)}
+function again(){customStart()}
+function quit(){$('p-quiz').style.display='none';$('p-done').style.display='none';$('p-home').style.display='block';refreshCats()}
+function render(){const c=sess.cards[sess.idx];sess.shown=false;
+$('p-bar').style.width=(sess.idx/sess.cards.length*100)+'%';
+$('p-prog').textContent=`第 ${sess.idx+1} / ${sess.cards.length} 题`;
+$('p-src').textContent=c.s;$('p-cat').textContent=c.c;
+$('p-q').textContent=c.q;$('p-a').style.display='none';$('p-a').innerHTML=c.ah;
+$('p-reveal').textContent='显示答案';
+$('p-mark').classList.toggle('on',marks.has(c.id));
+$('p-mark').textContent=marks.has(c.id)?'🔖 已标记（点击取消）':'🔖 标记不会';
+$('p-markhint').textContent='空格=显示答案，←→ 切题'}
+function toggleAnswer(){sess.shown=!sess.shown;
+$('p-a').style.display=sess.shown?'block':'none';
+$('p-reveal').textContent=sess.shown?'隐藏答案':'显示答案'}
+function toggleMark(){const c=sess.cards[sess.idx];
+marks.has(c.id)?marks.delete(c.id):marks.add(c.id);saveMarks();
+$('markcount').textContent=marks.size;render()}
+function nav(d){if(!sess)return;
+if(sess.idx+d>=sess.cards.length){finish();return}
+sess.idx=Math.max(0,sess.idx+d);render()}
+function finish(){const n=sess.cards.length;
+const mk=sess.cards.filter(c=>marks.has(c.id)).length;
+let t=JSON.parse(localStorage.getItem(LST)||'null');
+if(!t||t.date!==today())t={date:today(),n:0};
+t.n+=n;localStorage.setItem(LST,JSON.stringify(t));
+$('done-stat').textContent=`本组 ${n} 题，其中 ${mk} 题被标记为「不会」。今天已练 ${t.n} 题。${mk?'建议结束后用「只练标记不会」再过一遍。':''}`;
+$('p-quiz').style.display='none';$('p-done').style.display='block'}
+document.addEventListener('keydown',e=>{
+if($('p-quiz').style.display==='none')return;
+if(e.code==='Space'){e.preventDefault();toggleAnswer()}
+if(e.key==='ArrowRight')nav(1);
+if(e.key==='ArrowLeft')nav(-1)});
+$('markcount').textContent=marks.size;
+refreshCats();todayStat();
+</script>
   </main>
 </div>
 </body>
